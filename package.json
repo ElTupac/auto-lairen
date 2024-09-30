@@ -1,0 +1,17 @@
+{
+  "name": "auto-lairen",
+  "version": "1.0.0",
+  "description": "lairen match engine",
+  "main": "src/main.ts",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  },
+  "scripts": {
+    "start": "tsc && node dist/main.js",
+    "dev": "nodemon --exec ts-node src/main.ts"
+  }
+}
