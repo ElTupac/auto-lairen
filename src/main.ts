@@ -1,1 +1,1 @@
-console.log("Arrancar, arranca");
+console.log("");
