@@ -11,5 +11,8 @@ export type CardSchema<T> = {
   name: string;
   description: string;
   subtype: CardSchemaSubType;
+  cost: number;
+  // TODO: define additional_cost flow
+  additional_cost: unknown;
   data: T;
 };
