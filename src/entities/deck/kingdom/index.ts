@@ -8,4 +8,12 @@ export class Kingdom extends Area<
   ActionCard | MonumentCard | UnitCard | WeaponCard
 > {
   name = "kingdom-area";
+
+  constructor(kingdom: (ActionCard | MonumentCard | UnitCard | WeaponCard)[]) {
+    super(kingdom);
+  }
+
+  drawCard() {
+    return this.popCardByIndex(0);
+  }
 }
