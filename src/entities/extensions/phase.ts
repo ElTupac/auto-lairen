@@ -32,6 +32,6 @@ export abstract class Phase {
     return this._turn_id;
   }
 
-  startPhase: () => Promise<void>;
-  endPhase: () => Promise<void>;
+  abstract startPhase(): Promise<void>;
+  abstract endPhase(): Promise<void>;
 }
