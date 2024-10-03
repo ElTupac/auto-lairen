@@ -2,8 +2,8 @@ export abstract class Area<T> {
   readonly name!: string;
   private _content: T[];
 
-  constructor(content: T[]) {
-    this._content = content;
+  constructor(content?: T[]) {
+    this._content = content || [];
   }
 
   get content() {

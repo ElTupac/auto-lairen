@@ -55,4 +55,8 @@ export class Board {
       },
     };
   }
+
+  get areas() {
+    return this._areas;
+  }
 }
