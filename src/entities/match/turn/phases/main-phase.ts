@@ -1,3 +1,5 @@
 import { Phase } from "../../../extensions/phase";
 
-export class MainPhase extends Phase {}
+export class MainPhase extends Phase {
+  name = "main-phase";
+}
