@@ -7,10 +7,12 @@ import { MainPhase } from "./phases/main-phase";
 import { BattlePhase } from "./phases/battle-phase";
 import { EndPhase } from "./phases/end-phase";
 import { PurifyPhase } from "./phases/purify-phase";
+import { Match } from "..";
 
 export class Turn {
   private _turn_number: number;
   private _id: UUID;
+  private _player_owner_id: UUID;
 
   private _phases: Phase[];
   private _current_phase: number;
@@ -33,16 +35,26 @@ export class Turn {
     }
   }
 
-  constructor(turn: { turn_number: number; on_end_turn: () => void }) {
+  constructor(
+    turn: {
+      turn_number: number;
+      _player_owner_id: UUID;
+      on_end_turn: () => void;
+    },
+    match: Match
+  ) {
     this._turn_number = turn.turn_number;
     this._id = randomUUID();
+    this._player_owner_id = turn._player_owner_id;
     this._on_end_turn = turn.on_end_turn;
     this._current_phase = 0;
 
     const phasePayload = {
       turn_id: this._id,
+      turn_player_owner_id: this._player_owner_id,
       go_to_phase: this._go_to_phase,
       next_phase: this._next_phase,
+      match,
     };
 
     this._phases = [
