@@ -29,4 +29,10 @@ export abstract class Area<T> {
   protected popCardByIndex(index: number) {
     return this._content.splice(index, 1);
   }
+  protected addCardToTop(card: T) {
+    this._content.unshift(card);
+  }
+  protected addCardToBottom(card: T) {
+    this._content.push(card);
+  }
 }
