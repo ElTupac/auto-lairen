@@ -8,6 +8,12 @@ export class ReserveArea extends Area<Treasure> {
   addCards(cards: Treasure[]) {
     for (let i = 0; i < cards.length; i++) this.addCardToTop(cards[i]);
   }
+  sendCardToBottom(card: Treasure) {
+    this.addCardToBottom(card);
+  }
+  sendCartToTop(card: Treasure) {
+    this.addCardToTop(card);
+  }
   removeCards(cards_id: UUID[]) {
     const cards: Treasure[] = [];
     for (let i = 0; i < cards_id.length; i++) {

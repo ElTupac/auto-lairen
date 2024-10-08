@@ -20,4 +20,11 @@ export class OutOfUseReserveArea extends Area<Treasure> {
 
     return cards;
   }
+
+  retrieveTreasures(): Treasure[] {
+    const treasures: Treasure[] = [];
+    while (this.content.length) treasures.push(this.popCardByIndex(0)[0]);
+
+    return treasures;
+  }
 }

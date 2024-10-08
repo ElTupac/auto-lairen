@@ -57,4 +57,13 @@ export class Match {
   get board() {
     return this._board;
   }
+  getPlayerById(id: UUID): {
+    player: Player;
+    name: "player_1" | "player_2";
+  } {
+    if (this._player_1.id === id)
+      return { player: this._player_1, name: "player_1" };
+    if (this._player_2.id === id)
+      return { player: this._player_2, name: "player_2" };
+  }
 }
