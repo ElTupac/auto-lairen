@@ -15,7 +15,8 @@ export class RechargePhase extends Phase {
     const treasuresToRetrieve = board.out_of_use_reserve.retrieveTreasures();
     board.reserve.addCards(treasuresToRetrieve);
 
-    this.next_phase();
+    if (board.reserve.content.length < 7) this.next_phase();
+    else this.go_to_phase(2);
     return;
   }
   endPhase() {
