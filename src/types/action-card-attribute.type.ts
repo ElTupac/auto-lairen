@@ -1,1 +1,1 @@
-export type ActionCardAttributeType = "rapida";
+export type ActionCardAttributeType = "quick";

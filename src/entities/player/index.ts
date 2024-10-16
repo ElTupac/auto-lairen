@@ -22,6 +22,13 @@ export class Player {
     return this._deck;
   }
 
+  reduceHp(quantity: number) {
+    this.hp -= quantity;
+  }
+  addHp(quantity: number) {
+    this.hp += quantity;
+  }
+
   updateHp(update: number) {
     this.hp += update;
     return this.hp;

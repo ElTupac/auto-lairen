@@ -1,3 +1,5 @@
+import { Stackable } from "../../entities/extensions/stackable";
+import { Match } from "../../entities/match";
 import { CardMainType } from "../../types/card-main-type.type";
 import { CardSubtypeType } from "../../types/card-subtype.type";
 
@@ -13,6 +15,8 @@ export type CardSchema<T> = {
   subtype: CardSchemaSubType;
   cost: number;
   // TODO: define additional_cost flow
-  additional_cost: unknown;
+  additional_cost: unknown | null;
   data: T;
+
+  on_play: (match: Match) => Stackable;
 };
