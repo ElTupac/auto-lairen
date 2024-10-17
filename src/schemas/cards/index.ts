@@ -18,5 +18,5 @@ export type CardSchema<T> = {
   additional_cost: unknown | null;
   data: T;
 
-  on_play: (match: Match) => Stackable;
+  on_play: (match: Match) => Promise<Stackable>;
 };

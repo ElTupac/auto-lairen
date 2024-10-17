@@ -1,5 +1,6 @@
 import { ActionCard } from "../../src/entities/deck/kingdom/cards/action-card";
 import { Stackable } from "../../src/entities/extensions/stackable";
+import { prompt } from "../../src/prompt";
 import { ActionCardSchema } from "../../src/schemas/cards/action-card.schema";
 
 export class Card001 extends ActionCard {
@@ -13,9 +14,9 @@ export class Card001 extends ActionCard {
       attributes: ["quick"],
     },
     additional_cost: null,
-    on_play: (match) => {
+    on_play: async (match) => {
       // TODO: get objective
-      const objective_player = "player_1";
+      const objective_player = await prompt(["player_1", "player_2"] as const);
 
       return new Stackable({
         resolution: () => {
