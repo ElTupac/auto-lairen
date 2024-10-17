@@ -1,8 +1,7 @@
 import { randomUUID, UUID } from "crypto";
 
-export abstract class Card<T> {
+export abstract class StaticEffect {
   private _id: UUID;
-  schema: T;
 
   constructor() {
     this._id = randomUUID();

@@ -20,3 +20,12 @@ export type CardSchema<T> = {
 
   on_play: (match: Match) => Promise<Stackable>;
 };
+
+export type PermanentSchema<T> = {
+  type: CardMainType;
+  name: string;
+  description: string;
+  subtype: CardSchemaSubType;
+  cost: number;
+  data: T;
+};
