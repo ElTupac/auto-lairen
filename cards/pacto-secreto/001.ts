@@ -1,6 +1,8 @@
+import { IncreaseHp } from "../../src/commands/increase-hp";
+import { TargetPlayer } from "../../src/decorators/target-player";
 import { ActionCard } from "../../src/entities/deck/kingdom/cards/action-card";
 import { Stackable } from "../../src/entities/extensions/stackable";
-import { prompt } from "../../src/prompt";
+import { Match } from "../../src/entities/match";
 import { ActionCardSchema } from "../../src/schemas/cards/action-card.schema";
 
 export class Card001 extends ActionCard {
@@ -13,17 +15,20 @@ export class Card001 extends ActionCard {
     data: {
       attributes: ["quick"],
     },
-    additional_cost: null,
-    on_play: async (match) => {
-      // TODO: get objective
-      const objective_player = await prompt(["player_1", "player_2"] as const);
-
-      return new Stackable({
-        resolution: () => {
-          match[objective_player].addHp(5);
-        },
-        type: "order",
-      });
-    },
   };
+
+  async play(
+    match: Match,
+    @TargetPlayer targetPlayer: Promise<"player_1" | "player_2">
+  ) {
+    const player = await targetPlayer;
+
+    return new Stackable({
+      resolution: () => {
+        new IncreaseHp(match[player], 5);
+      },
+      source: "action",
+      type: "order",
+    });
+  }
 }

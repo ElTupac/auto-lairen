@@ -1,4 +1,3 @@
-import { Card } from "../entities/extensions/card";
 import { Player } from "../entities/player";
 
 const CARDS_TO_DRAW = 7;

@@ -5,12 +5,12 @@ import { Deck } from "../deck";
 export class Player {
   private _id: UUID;
   private _deck: Deck;
-  hp: number;
+  private _hp: number;
   playerHand: HandArea;
 
-  constructor(player: { deck: Deck }) {
+  constructor(player: { deck: Deck; initialHp?: number }) {
     this._id = randomUUID();
-    this.hp = 20;
+    this._hp = player.initialHp || 20;
     this._deck = player.deck;
     this.playerHand = new HandArea();
   }
@@ -21,16 +21,21 @@ export class Player {
   get deck() {
     return this._deck;
   }
+  get hp() {
+    return this._hp;
+  }
 
   reduceHp(quantity: number) {
-    this.hp -= quantity;
+    this._hp -= quantity;
+    return this._hp;
   }
-  addHp(quantity: number) {
-    this.hp += quantity;
+  increaseHp(quantity: number) {
+    this._hp += quantity;
+    return this._hp;
   }
 
   updateHp(update: number) {
-    this.hp += update;
-    return this.hp;
+    this._hp += update;
+    return this._hp;
   }
 }

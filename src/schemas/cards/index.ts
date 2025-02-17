@@ -14,11 +14,7 @@ export type CardSchema<T> = {
   description: string;
   subtype: CardSchemaSubType;
   cost: number;
-  // TODO: define additional_cost flow
-  additional_cost: unknown | null;
   data: T;
-
-  on_play: (match: Match) => Promise<Stackable>;
 };
 
 export type PermanentSchema<T> = {
