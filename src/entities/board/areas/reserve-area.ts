@@ -2,11 +2,12 @@ import { UUID } from "crypto";
 import { Area } from "../../extensions/area";
 import { Treasure } from "../../extensions/treasure";
 
-export class ReserveArea extends Area<Treasure> {
+export class ReserveArea extends Area {
   name = "reserve-area";
 
   addCards(cards: Treasure[]) {
-    for (let i = 0; i < cards.length; i++) this.addCardToTop(cards[i]);
+    for (let i = 0; i < cards.length; i++)
+      this.addCardToTop(cards[i] as Treasure);
   }
   sendCardToBottom(card: Treasure) {
     this.addCardToBottom(card);
@@ -20,7 +21,7 @@ export class ReserveArea extends Area<Treasure> {
       const index = this.content.findIndex(({ id }) => id === cards_id[i]);
       if (index > -1) {
         const poppedCard = this.popCardByIndex(index);
-        if (poppedCard.length) cards.push(poppedCard[0]);
+        if (poppedCard.length) cards.push(poppedCard[0] as Treasure);
       }
     }
 

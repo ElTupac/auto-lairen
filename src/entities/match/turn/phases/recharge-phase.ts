@@ -1,14 +1,17 @@
 import { Phase } from "../../../extensions/phase";
-import { Stack } from "../../../stack";
 
 export class RechargePhase extends Phase {
   name = "recharge-phase";
 
-  async startPhase() {
-    const board =
-      this.match.board.areas[
-        this.match.getPlayerById(this._turn_player_owner_id).name
-      ];
+  startPhase() {
+    console.log(
+      `turn ${this.turn_id} starts ${this.name}, ${
+        this.match.getPlayerById(this.turn_player_owner_id).name
+      }: ${this.turn_player_owner_id}`
+    );
+
+    const currentPlayer = this.match.getPlayerById(this.turn_player_owner_id);
+    const board = this.match.board.areas[currentPlayer.name];
     const permanentsToRetrieve = board.attack.retrievePermanents();
     board.formation.addCards(permanentsToRetrieve);
 
@@ -16,15 +19,8 @@ export class RechargePhase extends Phase {
     board.reserve.addCards(treasuresToRetrieve);
 
     if (board.reserve.content.length < 7) this.next_phase();
-    else this.go_to_phase(2);
+    if (this.turn_number !== 0) this.go_to_phase(2);
+    else this.go_to_phase(3);
     return;
-  }
-  endPhase() {
-    return new Promise<void>((resolve) => {
-      new Stack({
-        priority: this.match.getPlayerById(this._turn_player_owner_id).name,
-        on_close_stack: resolve,
-      });
-    });
   }
 }

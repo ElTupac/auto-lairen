@@ -1,7 +1,5 @@
-import { KingdomCard } from "../../deck/kingdom/cards";
 import { Area } from "../../extensions/area";
-import { Treasure } from "../../extensions/treasure";
 
-export class HellArea extends Area<KingdomCard | Treasure> {
+export class HellArea extends Area {
   name = "hell-area";
 }

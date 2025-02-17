@@ -1,10 +1,10 @@
+import { KingdomCard } from "../../deck/kingdom/cards";
 import { Area } from "../../extensions/area";
-import { Card } from "../../extensions/card";
 
-export class HandArea extends Area<Card> {
+export class HandArea extends Area {
   name = "hand-area";
 
-  addCards(cards: Card[]) {
+  addCards(cards: KingdomCard[]) {
     for (let i = 0; i < cards.length; i++) this.addCardToTop(cards[i]);
   }
 }

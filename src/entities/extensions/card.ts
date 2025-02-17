@@ -5,18 +5,18 @@ import { Area } from "./area";
 
 export abstract class Card<T> {
   private _id: UUID;
-  private _area: Area<unknown>;
+  private _area?: Area;
   schema: T;
 
   play?(match: Match, ...args: unknown[]): Promise<Stackable>;
   additional_cost?(match: Match, ...args: unknown[]): Promise<boolean>;
 
-  constructor(startingArea: Area<unknown>) {
+  constructor(startingArea?: Area) {
     this._id = randomUUID();
     this._area = startingArea;
   }
 
-  moveToArea(newArea: Area<unknown>) {
+  moveToArea(newArea: Area) {
     this._area = newArea;
   }
 

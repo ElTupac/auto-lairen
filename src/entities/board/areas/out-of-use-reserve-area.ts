@@ -2,11 +2,12 @@ import { UUID } from "crypto";
 import { Area } from "../../extensions/area";
 import { Treasure } from "../../extensions/treasure";
 
-export class OutOfUseReserveArea extends Area<Treasure> {
+export class OutOfUseReserveArea extends Area {
   name = "out-of-use-reserve-area";
 
   addCards(cards: Treasure[]) {
-    for (let i = 0; i < cards.length; i++) this.addCardToTop(cards[i]);
+    for (let i = 0; i < cards.length; i++)
+      this.addCardToTop(cards[i] as Treasure);
   }
   removeCards(cards_id: UUID[]) {
     const cards: Treasure[] = [];
@@ -14,7 +15,7 @@ export class OutOfUseReserveArea extends Area<Treasure> {
       const index = this.content.findIndex(({ id }) => id === cards_id[i]);
       if (index > -1) {
         const poppedCard = this.popCardByIndex(index);
-        if (poppedCard.length) cards.push(poppedCard[0]);
+        if (poppedCard.length) cards.push(poppedCard[0] as Treasure);
       }
     }
 
@@ -23,7 +24,8 @@ export class OutOfUseReserveArea extends Area<Treasure> {
 
   retrieveTreasures(): Treasure[] {
     const treasures: Treasure[] = [];
-    while (this.content.length) treasures.push(this.popCardByIndex(0)[0]);
+    while (this.content.length)
+      treasures.push(this.popCardByIndex(0)[0] as Treasure);
 
     return treasures;
   }

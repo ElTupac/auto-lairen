@@ -1,9 +1,14 @@
-export abstract class Area<T> {
-  readonly name!: string;
-  private _content: T[];
+import { Card } from "./card";
 
-  constructor(content?: T[]) {
-    this._content = content || [];
+export abstract class Area {
+  readonly name!: string;
+  private _content: Card<unknown>[];
+
+  constructor(content?: Card<unknown>[]) {
+    this._content = (content || []).map((card) => {
+      card.moveToArea(this);
+      return card;
+    });
   }
 
   get content() {
@@ -29,10 +34,25 @@ export abstract class Area<T> {
   protected popCardByIndex(index: number) {
     return this._content.splice(index, 1);
   }
-  protected addCardToTop(card: T) {
+  protected addCardToTop(card: Card<unknown>) {
+    card.moveToArea(this);
     this._content.unshift(card);
   }
-  protected addCardToBottom(card: T) {
+  protected addCardToBottom(card: Card<unknown>) {
+    card.moveToArea(this);
     this._content.push(card);
+  }
+
+  moveCardToThisArea(card: Card<unknown>, sendBottom?: boolean) {
+    if (card.area) {
+      const currentAreaCardIndex = card.area.content.findIndex(
+        ({ id }) => id === card.id
+      );
+      if (currentAreaCardIndex !== -1)
+        card.area.popCardByIndex(currentAreaCardIndex);
+    }
+
+    if (sendBottom) this.addCardToBottom(card);
+    else this.addCardToTop(card);
   }
 }

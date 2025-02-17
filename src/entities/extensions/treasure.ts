@@ -1,13 +1,8 @@
-import { randomUUID, UUID } from "crypto";
+import { Area } from "./area";
+import { Card } from "./card";
 
-export class Treasure {
-  private _id: UUID;
-
-  constructor() {
-    this._id = randomUUID();
-  }
-
-  get id() {
-    return this._id;
+export class Treasure extends Card<{}> {
+  constructor(startingArea?: Area) {
+    super(startingArea);
   }
 }

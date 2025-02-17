@@ -5,10 +5,21 @@ import { Vault } from "./entities/deck/vault";
 import { Match } from "./entities/match";
 import { Player } from "./entities/player";
 import { drawInitialHand } from "./actions/draw-initial-hand";
+import { Card001 } from "../cards/pacto-secreto/001";
+import { Card002 } from "../cards/pacto-secreto/002";
 
 const player_1 = new Player({
   deck: new Deck({
-    kingdom: new Kingdom([]),
+    kingdom: new Kingdom([
+      new Card001(),
+      new Card002(),
+      new Card001(),
+      new Card002(),
+      new Card001(),
+      new Card002(),
+      new Card001(),
+      new Card002(),
+    ]),
     vault: new Vault([]),
     player_id: randomUUID(),
   }),

@@ -3,7 +3,7 @@ import { Area } from "../../../extensions/area";
 import { Card } from "../../../extensions/card";
 
 export class WeaponCard extends Card<WeaponCardSchema> {
-  constructor(startingArea: Area<unknown>) {
+  constructor(startingArea?: Area) {
     super(startingArea);
   }
 }

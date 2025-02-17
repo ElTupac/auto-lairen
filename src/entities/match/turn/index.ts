@@ -25,13 +25,35 @@ export class Turn {
       await this._phases[this._current_phase].startPhase();
     }
   }
+
+  get phasesLength() {
+    return this._phases.length;
+  }
+
+  get currentPhaseIndex() {
+    return this._current_phase;
+  }
+
+  private incrementCurrentPhase() {
+    this._current_phase += 1;
+  }
+
+  get turn_number() {
+    return this._turn_number;
+  }
+  get id() {
+    return this._id;
+  }
+
   private async _next_phase() {
-    if (this._current_phase >= this._phases.length) {
+    if (this.currentPhaseIndex >= this.phasesLength) {
       this._on_end_turn();
     } else {
-      await this._phases[this._current_phase].endPhase();
-      this._current_phase += 1;
-      await this._phases[this._current_phase].startPhase();
+      const phases = this._phases;
+
+      await phases[this.currentPhaseIndex].endPhase();
+      this.incrementCurrentPhase();
+      phases[this.currentPhaseIndex].startPhase();
     }
   }
 
@@ -50,10 +72,11 @@ export class Turn {
     this._current_phase = 0;
 
     const phasePayload = {
-      turn_id: this._id,
-      turn_player_owner_id: this._player_owner_id,
-      go_to_phase: this._go_to_phase,
-      next_phase: this._next_phase,
+      turn_id: (() => this._id)(),
+      turn_player_owner_id: (() => this._player_owner_id)(),
+      turn_number: (() => this.turn_number)(),
+      go_to_phase: (index: number) => this._go_to_phase(index),
+      next_phase: () => this._next_phase(),
       match,
     };
 
@@ -69,15 +92,5 @@ export class Turn {
     ];
 
     this._phases[this._current_phase].startPhase();
-  }
-
-  get turn_number() {
-    return this._turn_number;
-  }
-  get id() {
-    return this._id;
-  }
-  get current_phase() {
-    return this._phases.slice(this._current_phase, 1);
   }
 }

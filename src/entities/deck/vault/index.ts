@@ -1,7 +1,7 @@
 import { Area } from "../../extensions/area";
 import { Treasure } from "../../extensions/treasure";
 
-export class Vault extends Area<Treasure> {
+export class Vault extends Area {
   name = "vault-area";
 
   constructor(vault: Treasure[]) {
