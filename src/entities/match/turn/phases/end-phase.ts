@@ -9,6 +9,9 @@ export class EndPhase extends Phase {
         this.match.getPlayerById(this.turn_player_owner_id).name
       }: ${this.turn_player_owner_id}`
     );
+
+    this.next_phase();
+
     return;
   }
 }

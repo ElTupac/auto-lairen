@@ -1,4 +1,9 @@
+export const PROMPT_MAXIMUM_TIME = 500;
+
 export const prompt: <T>(options: T[]) => Promise<T> = async (options) => {
-  // TODO: See how to this options reach user, and how comes again
-  return options[0];
+  return new Promise<(typeof options)[0]>((resolve) => {
+    setTimeout(() => {
+      resolve(options[0]);
+    }, PROMPT_MAXIMUM_TIME);
+  });
 };

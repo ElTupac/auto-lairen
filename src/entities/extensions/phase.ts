@@ -8,6 +8,7 @@ export type PhasePayload = {
   turn_number: number;
   go_to_phase: (phase_to_go: number) => void;
   next_phase: () => void;
+  current_phase_number: () => number;
   match: Match;
 };
 
@@ -18,6 +19,7 @@ export abstract class Phase {
   private _turn_id: UUID;
   protected _turn_number: number;
   protected _turn_player_owner_id: UUID;
+  protected _current_phase_number: () => number;
 
   protected match: Match;
   protected go_to_phase: (phase_to_go: number) => void;
@@ -31,6 +33,7 @@ export abstract class Phase {
     this.next_phase = phase.next_phase;
     this._turn_player_owner_id = phase.turn_player_owner_id;
     this._turn_number = phase.turn_number;
+    this._current_phase_number = phase.current_phase_number;
   }
 
   get id() {

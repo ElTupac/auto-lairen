@@ -29,7 +29,16 @@ player_1.deck.vault.shuffleContent();
 
 const player_2 = new Player({
   deck: new Deck({
-    kingdom: new Kingdom([]),
+    kingdom: new Kingdom([
+      new Card001(),
+      new Card002(),
+      new Card001(),
+      new Card002(),
+      new Card001(),
+      new Card002(),
+      new Card001(),
+      new Card002(),
+    ]),
     vault: new Vault([]),
     player_id: randomUUID(),
   }),

@@ -46,7 +46,7 @@ export class Turn {
   }
 
   private async _next_phase() {
-    if (this.currentPhaseIndex >= this.phasesLength) {
+    if (this.currentPhaseIndex + 1 >= this.phasesLength) {
       this._on_end_turn();
     } else {
       const phases = this._phases;
@@ -77,6 +77,7 @@ export class Turn {
       turn_number: (() => this.turn_number)(),
       go_to_phase: (index: number) => this._go_to_phase(index),
       next_phase: () => this._next_phase(),
+      current_phase_number: () => this._current_phase,
       match,
     };
 
