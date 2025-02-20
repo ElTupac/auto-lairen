@@ -12,5 +12,11 @@ export type UnitPermanentSchema = PermanentSchema<{
   strengh: number;
   resistance: number;
 
-  damage_register: number;
+  damage_register?: number;
+  state_change?: Partial<{
+    temp_strengh_buff: number;
+    temp_resistance_buff: number;
+    perm_strengh_buff: number;
+    perm_resistance_buff: number;
+  }>;
 }>;

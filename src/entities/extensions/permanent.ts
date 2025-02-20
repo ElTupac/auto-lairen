@@ -1,5 +1,7 @@
 import { randomUUID, UUID } from "crypto";
 import { KingdomCard } from "../deck/kingdom/cards";
+import { PermanentDead } from "../../commands/permanents/permanent-dead";
+import { GeneralPermanent } from "../board/permanents";
 
 type PermanentPayload<S> = {
   origin: "monument" | "unit" | "weapon" | "unit-monument" | null;
@@ -40,6 +42,13 @@ export abstract class Permanent<T> {
   }
 
   destroy(): Promise<{ success: boolean }> {
+    new PermanentDead(this as GeneralPermanent);
+
+    return new Promise((resolve) =>
+      setTimeout(() => resolve({ success: true }), 500)
+    );
+  }
+  dead(): Promise<{ success: boolean }> {
     if (this._origin_order?.owner) {
       this.origin_order.owner.board.discard.moveCardToThisArea(
         this.origin_order

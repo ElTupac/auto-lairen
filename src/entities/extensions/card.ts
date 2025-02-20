@@ -11,7 +11,7 @@ export abstract class Card<T> {
   private _controller?: Player;
   schema: T;
 
-  play?(match: Match, ...args: unknown[]): Promise<Stackable>;
+  abstract play?(match: Match, ...args: unknown[]): Promise<Stackable>;
   additional_cost?(match: Match, ...args: unknown[]): Promise<boolean>;
 
   constructor(startingArea?: Area) {
