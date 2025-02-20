@@ -1,4 +1,5 @@
 import { Area } from "../../extensions/area";
+import { Player } from "../../player";
 import { KingdomCard } from "./cards";
 import { ActionCard } from "./cards/action-card";
 import { MonumentCard } from "./cards/monument-card";
@@ -8,8 +9,11 @@ import { WeaponCard } from "./cards/weapon-card";
 export class Kingdom extends Area {
   name = "kingdom-area";
 
-  constructor(kingdom: (ActionCard | MonumentCard | UnitCard | WeaponCard)[]) {
-    super(kingdom);
+  constructor(
+    player: Player,
+    kingdom: (ActionCard | MonumentCard | UnitCard | WeaponCard)[]
+  ) {
+    super(player, kingdom);
   }
 
   drawCard() {

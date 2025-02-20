@@ -19,10 +19,19 @@ export class Match {
     this._player_1 = match.player_1;
     this._player_2 = match.player_2;
 
-    this._board = new Board({
-      deck_player_1: this._player_1.deck,
-      deck_player_2: this._player_2.deck,
-    });
+    this._board = new Board(
+      {
+        deck_player_1: this._player_1.deck,
+        deck_player_2: this._player_2.deck,
+      },
+      {
+        player_1: match.player_1,
+        player_2: match.player_2,
+      }
+    );
+
+    match.player_1.giveOwnBoard(this._board.areas.player_1);
+    match.player_2.giveOwnBoard(this._board.areas.player_2);
 
     const startTurn = (
       turn_player_owner_id: UUID,

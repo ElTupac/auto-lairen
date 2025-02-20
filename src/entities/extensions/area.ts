@@ -1,18 +1,26 @@
+import { Player } from "../player";
 import { Card } from "./card";
 
 export abstract class Area {
   readonly name!: string;
   private _content: Card<unknown>[];
+  private _owner: Player;
 
-  constructor(content?: Card<unknown>[]) {
+  constructor(owner: Player, content?: Card<unknown>[]) {
+    this._owner = owner;
     this._content = (content || []).map((card) => {
       card.moveToArea(this);
+      card.takeOwn(owner);
       return card;
     });
   }
 
   get content() {
     return this._content;
+  }
+
+  get owner() {
+    return this._owner;
   }
 
   shuffleContent() {
