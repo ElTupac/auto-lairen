@@ -9,7 +9,7 @@ type WeaponPermanentType = {
   schema: WeaponPermanentSchema;
 };
 
-export class WeaponPermanen extends Permanent<WeaponPermanentSchema> {
+export class WeaponPermanent extends Permanent<WeaponPermanentSchema> {
   constructor(weaponPermanent: WeaponPermanentType) {
     super({
       origin: "weapon",

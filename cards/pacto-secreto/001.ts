@@ -25,7 +25,10 @@ export class Card001 extends ActionCard {
 
     return new Stackable({
       resolution: () => {
-        new IncreaseHp(match[player], 5);
+        new IncreaseHp(match[player], 5, {
+          type: "order",
+          order: this,
+        });
       },
       source: "action",
       type: "order",

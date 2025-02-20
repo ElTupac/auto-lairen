@@ -4,9 +4,9 @@ import { Kingdom } from "./entities/deck/kingdom";
 import { Vault } from "./entities/deck/vault";
 import { Match } from "./entities/match";
 import { Player } from "./entities/player";
-import { drawInitialHand } from "./actions/draw-initial-hand";
 import { Card001 } from "../cards/pacto-secreto/001";
 import { Card002 } from "../cards/pacto-secreto/002";
+import { DrawInitialHand } from "./commands/draw-initial-hand";
 
 const player_1 = new Player();
 const deck_p1 = new Deck({
@@ -49,8 +49,8 @@ player_2.giveDeck(deck_p2);
 player_2.deck.kingdom.shuffleContent();
 player_2.deck.vault.shuffleContent();
 
-drawInitialHand(player_1);
-drawInitialHand(player_2);
+new DrawInitialHand(player_1);
+new DrawInitialHand(player_2);
 
 // TODO: Mulligan step
 

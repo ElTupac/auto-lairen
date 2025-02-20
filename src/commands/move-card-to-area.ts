@@ -12,7 +12,7 @@ export class MoveCardToArea extends Command {
     this._area = areaToMove;
   }
 
-  execute(): void {
+  execute() {
     this._area.moveCardToThisArea(this._card);
   }
 }

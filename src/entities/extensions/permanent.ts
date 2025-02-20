@@ -39,7 +39,7 @@ export abstract class Permanent<T> {
     return this._schema;
   }
 
-  protected destroy(): Promise<{ success: boolean }> {
+  destroy(): Promise<{ success: boolean }> {
     if (this._origin_order?.owner) {
       this.origin_order.owner.board.discard.moveCardToThisArea(
         this.origin_order
@@ -54,7 +54,7 @@ export abstract class Permanent<T> {
       setTimeout(() => resolve({ success: false }), 500)
     );
   }
-  protected condemn(): Promise<{ success: boolean }> {
+  condemn(): Promise<{ success: boolean }> {
     if (this.origin_order?.owner) {
       this.origin_order.owner.board.hell.moveCardToThisArea(this.origin_order);
 
@@ -67,7 +67,7 @@ export abstract class Permanent<T> {
       setTimeout(() => resolve({ success: false }), 500)
     );
   }
-  protected returnHand(): Promise<{ success: boolean }> {
+  returnHand(): Promise<{ success: boolean }> {
     if (this.origin_order?.owner) {
       this.origin_order.owner.playerHand.moveCardToThisArea(this.origin_order);
 
@@ -80,7 +80,7 @@ export abstract class Permanent<T> {
       setTimeout(() => resolve({ success: false }), 500)
     );
   }
-  protected sendToKingdomEnd(): Promise<{ success: boolean }> {
+  sendToKingdomEnd(): Promise<{ success: boolean }> {
     if (this.origin_order?.owner) {
       this.origin_order.owner.deck.kingdom.moveCardToThisArea(
         this.origin_order,
@@ -96,7 +96,7 @@ export abstract class Permanent<T> {
       setTimeout(() => resolve({ success: false }), 500)
     );
   }
-  protected sendToKingdomTop(): Promise<{ success: boolean }> {
+  sendToKingdomTop(): Promise<{ success: boolean }> {
     if (this.origin_order?.owner) {
       this.origin_order.owner.deck.kingdom.moveCardToThisArea(
         this.origin_order

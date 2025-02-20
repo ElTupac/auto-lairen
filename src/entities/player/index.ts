@@ -12,8 +12,8 @@ export class Player {
 
   constructor(player?: { deck?: Deck; initialHp?: number }) {
     this._id = randomUUID();
-    this._hp = player.initialHp || 20;
-    this._deck = player.deck;
+    this._hp = player?.initialHp || 20;
+    this._deck = player?.deck;
     this.playerHand = new HandArea(this);
   }
 
