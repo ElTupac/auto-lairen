@@ -15,10 +15,13 @@ export class Card002 extends ActionCard {
     data: { attributes: ["quick"] },
   };
 
-  async play(@GetMatch match: Match): Promise<Stackable> {
+  @GetMatch
+  match: Match;
+
+  async play(): Promise<Stackable> {
     return new Stackable({
       resolution: () => {
-        new DestroyAllBoardUnits(match.board);
+        new DestroyAllBoardUnits(this.match.board);
       },
       source: "action",
       type: "order",

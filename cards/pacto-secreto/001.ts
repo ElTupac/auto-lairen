@@ -18,16 +18,17 @@ export class Card001 extends ActionCard {
     },
   };
 
-  async play(
-    @GetMatch match: Match,
-    @TargetPlayer targetPlayer: () => Promise<"player_1" | "player_2">
-  ) {
-    console.log(targetPlayer);
-    const player = await targetPlayer();
+  @GetMatch
+  match: Match;
+  @TargetPlayer
+  targetPlayer: () => Promise<"player_1" | "player_2">;
+
+  async play() {
+    const player = await this.targetPlayer();
 
     return new Stackable({
       resolution: () => {
-        new IncreaseHp(match[player], 5, {
+        new IncreaseHp(this.match[player], 5, {
           type: "order",
           order: this,
         });
