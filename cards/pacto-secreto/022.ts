@@ -1,7 +1,6 @@
 import { UnitPermanent } from "../../src/entities/board/permanents";
 import { UnitCard } from "../../src/entities/deck/kingdom/cards";
 import { Stackable } from "../../src/entities/extensions/stackable";
-import { Match } from "../../src/entities/match";
 import { UnitCardSchema } from "../../src/schemas/cards/unit-card.schema";
 
 export class Card022 extends UnitCard {
@@ -19,7 +18,7 @@ export class Card022 extends UnitCard {
     },
   };
 
-  async play(match: Match): Promise<Stackable> {
+  async play(): Promise<Stackable> {
     return new Stackable({
       resolution: () => {
         new UnitPermanent({
@@ -32,4 +31,6 @@ export class Card022 extends UnitCard {
       type: "order",
     });
   }
+
+  additional_cost: undefined;
 }

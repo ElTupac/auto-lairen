@@ -5,8 +5,9 @@ export const TargetPlayer: ParameterDecorator = (
   propertyKey,
   parameterIndex
 ) => {
-  target[propertyKey][parameterIndex] = prompt<"player_1" | "player_2">([
-    "player_1",
-    "player_2",
-  ]);
+  target[propertyKey][parameterIndex] = () =>
+    prompt([
+      { value: "player_1", label: "Jugador 1" },
+      { value: "player_2", label: "Jugador 2" },
+    ]);
 };

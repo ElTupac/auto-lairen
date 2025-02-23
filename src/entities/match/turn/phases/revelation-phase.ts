@@ -1,5 +1,5 @@
+import { RevealTreasure } from "../../../../commands/reveal-treasure";
 import { Phase } from "../../../extensions/phase";
-import { Treasure } from "../../../extensions/treasure";
 
 export class RevelationPhase extends Phase {
   name = "revelation-phase";
@@ -12,9 +12,9 @@ export class RevelationPhase extends Phase {
     );
 
     const currentPlayer = this.match.getPlayerById(this.turn_player_owner_id);
-    const board = this.match.board.areas[currentPlayer.name];
-    const cardToReveal = board.vault.popTopCard() as Treasure[];
-    board.reserve.addCards(cardToReveal);
+    new RevealTreasure(currentPlayer.player, {
+      type: "interaction",
+    });
 
     this.next_phase();
 

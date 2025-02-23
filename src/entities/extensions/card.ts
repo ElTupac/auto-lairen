@@ -1,6 +1,4 @@
 import { randomUUID, UUID } from "crypto";
-import { Stackable } from "./stackable";
-import { Match } from "../match";
 import { Area } from "./area";
 import { Player } from "../player";
 
@@ -10,9 +8,6 @@ export abstract class Card<T> {
   private _owner?: Player;
   private _controller?: Player;
   schema: T;
-
-  abstract play?(match: Match, ...args: unknown[]): Promise<Stackable>;
-  additional_cost?(match: Match, ...args: unknown[]): Promise<boolean>;
 
   constructor(startingArea?: Area) {
     this._id = randomUUID();

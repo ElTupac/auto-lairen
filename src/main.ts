@@ -7,6 +7,7 @@ import { Player } from "./entities/player";
 import { Card001 } from "../cards/pacto-secreto/001";
 import { Card002 } from "../cards/pacto-secreto/002";
 import { DrawInitialHand } from "./commands/draw-initial-hand";
+import { GenericTreasure } from "../cards/pacto-secreto/generic-treasure";
 
 const player_1 = new Player();
 const deck_p1 = new Deck({
@@ -20,7 +21,18 @@ const deck_p1 = new Deck({
     new Card001(),
     new Card002(),
   ]),
-  vault: new Vault(player_1, []),
+  vault: new Vault(player_1, [
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+  ]),
   player_id: randomUUID(),
 });
 player_1.giveDeck(deck_p1);
@@ -41,7 +53,18 @@ const deck_p2 = new Deck({
     new Card001(),
     new Card002(),
   ]),
-  vault: new Vault(player_2, []),
+  vault: new Vault(player_2, [
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+    new GenericTreasure(),
+  ]),
   player_id: randomUUID(),
 });
 player_2.giveDeck(deck_p2);

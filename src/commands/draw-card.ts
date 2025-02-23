@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { Command } from "../entities/extensions/command";
 import { Player } from "../entities/player";
 import { emitEvent } from "../events/event-manager";

@@ -1,5 +1,8 @@
+import { PlayOrder } from "../../commands/play-order";
 import { prompt } from "../../prompt";
+import { KingdomCard } from "../deck/kingdom/cards";
 import { Stackable } from "../extensions/stackable";
+import { getCurrentMatch } from "../match";
 
 let started: boolean = false;
 
@@ -42,7 +45,12 @@ export class Stack {
           ]
     );
 
-    console.log(answer);
+    if (answer.value.includes("to-stack")) {
+      return new PlayOrder(
+        getCurrentMatch()[priority],
+        getCurrentMatch()[priority].playerHand.content[0] as KingdomCard
+      );
+    }
 
     if (priority === "player_1") return this.startPriorityLoop("player_2");
     else return this.startPriorityLoop("player_1");

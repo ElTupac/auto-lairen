@@ -3,6 +3,10 @@ import { Player } from "../player";
 import { Board } from "../board";
 import { Turn } from "./turn";
 
+let currentMatch: Match | undefined;
+
+export const getCurrentMatch: () => Match | undefined = () => currentMatch;
+
 export class Match {
   private _id: UUID;
   private _player_1: Player;
@@ -15,6 +19,8 @@ export class Match {
     player_2: Player;
     first_turn: "player_1" | "player_2";
   }) {
+    if (!currentMatch) currentMatch = this;
+    else throw new Error("Match already started");
     this._id = randomUUID();
     this._player_1 = match.player_1;
     this._player_2 = match.player_2;
