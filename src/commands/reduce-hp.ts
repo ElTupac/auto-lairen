@@ -12,7 +12,7 @@ export class ReduceHp extends Command {
     player: Player,
     quantity,
     origin: {
-      order?: KingdomCard;
+      order?: KingdomCard<unknown>;
       permanent?: GeneralPermanent;
       type: "effect" | "order" | "permanent" | "interaction";
     }

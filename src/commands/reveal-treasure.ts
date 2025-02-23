@@ -11,7 +11,7 @@ export class RevealTreasure extends Command {
   constructor(
     player: Player,
     origin: {
-      order?: KingdomCard;
+      order?: KingdomCard<unknown>;
       permanent?: GeneralPermanent;
       type: "effect" | "order" | "permanent" | "interaction";
     }

@@ -1,6 +1,6 @@
 import { UUID } from "crypto";
 import { Area } from "../../extensions/area";
-import { UnitCard } from "../../deck/kingdom/cards";
+import { UnitCard } from "../../deck/kingdom/cards/unit-card";
 
 export class AttackArea extends Area {
   name = "attack-area";

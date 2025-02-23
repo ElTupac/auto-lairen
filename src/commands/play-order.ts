@@ -8,10 +8,10 @@ import { PayOrderCost } from "./pay-order-cost";
 import { UseTreasure } from "./use-treasure";
 
 export class PlayOrder extends Command {
-  private _card: KingdomCard;
+  private _card: KingdomCard<unknown>;
   private _gold: Gold[];
 
-  constructor(player: Player, card: KingdomCard) {
+  constructor(player: Player, card: KingdomCard<unknown>) {
     super();
     this._card = card;
 

@@ -1,9 +1,9 @@
 import { UUID } from "crypto";
 import { Permanent } from "../../extensions/permanent";
 import { UnitPermanentSchema } from "../../../schemas/cards/unit-card.schema";
-import { UnitCard } from "../../deck/kingdom/cards";
 import { PermanentDestroy } from "../../../commands/permanents/permanent-destroy";
 import { PermanentDead } from "../../../commands/permanents/permanent-dead";
+import { UnitCard } from "../../deck/kingdom/cards/unit-card";
 
 type UnitPermanentType = {
   origin_id: UUID;

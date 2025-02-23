@@ -12,7 +12,7 @@ export class IncreaseHp extends Command {
     player: Player,
     quantity: number,
     origin: {
-      order?: KingdomCard;
+      order?: KingdomCard<unknown>;
       permanent?: GeneralPermanent;
       type: "effect" | "order" | "permanent" | "interaction";
     }

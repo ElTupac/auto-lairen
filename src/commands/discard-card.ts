@@ -6,13 +6,13 @@ import { emitEvent } from "../events/event-manager";
 
 export class DiscardCard extends Command {
   private _player: Player;
-  private _card: KingdomCard;
+  private _card: KingdomCard<unknown>;
 
   constructor(
     player: Player,
-    card: KingdomCard,
+    card: KingdomCard<unknown>,
     origin: {
-      order?: KingdomCard;
+      order?: KingdomCard<unknown>;
       permanent?: GeneralPermanent;
       type: "effect" | "order" | "permanent" | "interaction";
     }

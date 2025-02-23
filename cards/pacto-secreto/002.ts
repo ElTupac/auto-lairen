@@ -1,6 +1,6 @@
 import { DestroyAllBoardUnits } from "../../src/commands/destroy-all-board-units";
 import { GetMatch } from "../../src/decorators/get-match";
-import { ActionCard } from "../../src/entities/deck/kingdom/cards";
+import { ActionCard } from "../../src/entities/deck/kingdom/cards/action-card";
 import { Stackable } from "../../src/entities/extensions/stackable";
 import { Match } from "../../src/entities/match";
 import { ActionCardSchema } from "../../src/schemas/cards/action-card.schema";

@@ -48,7 +48,8 @@ export class Stack {
     if (answer.value.includes("to-stack")) {
       return new PlayOrder(
         getCurrentMatch()[priority],
-        getCurrentMatch()[priority].playerHand.content[0] as KingdomCard
+        getCurrentMatch()[priority].playerHand
+          .content[0] as KingdomCard<unknown>
       );
     }
 

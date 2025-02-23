@@ -1,5 +1,5 @@
 import { UnitPermanent } from "../../src/entities/board/permanents";
-import { UnitCard } from "../../src/entities/deck/kingdom/cards";
+import { UnitCard } from "../../src/entities/deck/kingdom/cards/unit-card";
 import { Stackable } from "../../src/entities/extensions/stackable";
 import { UnitCardSchema } from "../../src/schemas/cards/unit-card.schema";
 

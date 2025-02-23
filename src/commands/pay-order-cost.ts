@@ -4,10 +4,10 @@ import { Gold } from "../entities/gold";
 import { emitEvent } from "../events/event-manager";
 
 export class PayOrderCost extends Command {
-  private _card: KingdomCard;
+  private _card: KingdomCard<unknown>;
   private _gold: Gold[];
 
-  constructor(card: KingdomCard, gold: Gold[]) {
+  constructor(card: KingdomCard<unknown>, gold: Gold[]) {
     super();
     this._card = card;
 

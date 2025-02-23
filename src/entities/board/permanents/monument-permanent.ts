@@ -1,7 +1,7 @@
 import { UUID } from "crypto";
 import { MonumentPermanentSchema } from "../../../schemas/cards/monument-card.schema";
 import { Permanent } from "../../extensions/permanent";
-import { MonumentCard } from "../../deck/kingdom/cards";
+import { MonumentCard } from "../../deck/kingdom/cards/monument-card";
 
 type MonumentPermanentType = {
   origin_id: UUID;

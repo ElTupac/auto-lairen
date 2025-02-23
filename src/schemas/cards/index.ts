@@ -1,5 +1,3 @@
-import { Stackable } from "../../entities/extensions/stackable";
-import { Match } from "../../entities/match";
 import { CardMainType } from "../../types/card-main-type.type";
 import { CardSubtypeType } from "../../types/card-subtype.type";
 
