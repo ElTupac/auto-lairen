@@ -1,6 +1,8 @@
+import { GetMatch } from "../decorators/get-match";
 import { KingdomCard } from "../entities/deck/kingdom/cards";
 import { Command } from "../entities/extensions/command";
 import { Gold } from "../entities/gold";
+import { Match } from "../entities/match";
 import { emitEvent } from "../events/event-manager";
 
 export class PayOrderCost extends Command {
@@ -24,8 +26,13 @@ export class PayOrderCost extends Command {
     });
   }
 
+  @GetMatch
+  match: () => Match;
+
   execute() {
     for (let i = 0; i < this._gold.length; i++) this._gold[i].use();
-    this._card.play();
+    this._card.play().then((stackable) => {
+      this.match().current_turn.currentPhase.stack.tacTheStack(stackable);
+    });
   }
 }

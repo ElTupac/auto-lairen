@@ -13,6 +13,7 @@ export class Match {
   private _player_2: Player;
   private _board: Board;
   private _current_turn: number = 0;
+  private _current_turn_entity: Turn;
 
   constructor(match: {
     player_1: Player;
@@ -43,7 +44,7 @@ export class Match {
       turn_player_owner_id: UUID,
       turn_player_not_owner_id: UUID
     ) => {
-      new Turn(
+      this._current_turn_entity = new Turn(
         {
           turn_number: this._current_turn,
           _player_owner_id: turn_player_owner_id,
@@ -72,6 +73,11 @@ export class Match {
   get board() {
     return this._board;
   }
+
+  get current_turn() {
+    return this._current_turn_entity;
+  }
+
   getPlayerById(id: UUID): {
     player: Player;
     name: "player_1" | "player_2";

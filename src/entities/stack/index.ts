@@ -1,8 +1,10 @@
+import { UUID } from "crypto";
 import { PlayOrder } from "../../commands/play-order";
 import { prompt } from "../../prompt";
 import { KingdomCard } from "../deck/kingdom/cards";
 import { Stackable } from "../extensions/stackable";
 import { getCurrentMatch } from "../match";
+import { PlayOptions } from "./play-options";
 
 let started: boolean = false;
 
@@ -30,8 +32,12 @@ export class Stack {
     initialFlag?: boolean
   ) {
     if (!initialFlag && priority === this.priority) {
-      started = false;
-      return this._on_close_stack();
+      if (!this._stack.length) {
+        started = false;
+        return this._on_close_stack();
+      }
+      const lastStackble = this._stack.pop();
+      lastStackble.resolve();
     }
     const answer = await prompt(
       priority === "player_1"
@@ -46,11 +52,22 @@ export class Stack {
     );
 
     if (answer.value.includes("to-stack")) {
-      return new PlayOrder(
-        getCurrentMatch()[priority],
-        getCurrentMatch()[priority].playerHand
-          .content[0] as KingdomCard<unknown>
-      );
+      const playerAnswer = await new Promise<UUID | null>((resolve) => {
+        new PlayOptions(getCurrentMatch()[priority])
+          .chooseOption()
+          .then(resolve);
+      });
+      if (playerAnswer) {
+        const order = getCurrentMatch()[priority].playerHand.content.find(
+          ({ id }) => id === playerAnswer
+        );
+        if (order) {
+          return new PlayOrder(
+            getCurrentMatch()[priority],
+            order as KingdomCard<unknown>
+          );
+        }
+      }
     }
 
     if (priority === "player_1") return this.startPriorityLoop("player_2");
@@ -62,5 +79,10 @@ export class Stack {
       started = true;
       this.startPriorityLoop(this.priority, true);
     }
+  }
+
+  tacTheStack(stackable: Stackable) {
+    this._stack.push(stackable);
+    this.startStackIntervention();
   }
 }

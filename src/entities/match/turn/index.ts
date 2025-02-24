@@ -34,6 +34,10 @@ export class Turn {
     return this._current_phase;
   }
 
+  get currentPhase() {
+    return this._phases[this.currentPhaseIndex];
+  }
+
   private incrementCurrentPhase() {
     this._current_phase += 1;
   }
@@ -72,13 +76,13 @@ export class Turn {
     this._current_phase = 0;
 
     const phasePayload = {
-      turn_id: (() => this._id)(),
       turn_player_owner_id: (() => this._player_owner_id)(),
       turn_number: (() => this.turn_number)(),
       go_to_phase: (index: number) => this._go_to_phase(index),
       next_phase: () => this._next_phase(),
       current_phase_number: () => this._current_phase,
       match,
+      turn: this,
     };
 
     this._phases = [

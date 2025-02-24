@@ -19,7 +19,7 @@ export class Card001 extends ActionCard {
   };
 
   @GetMatch
-  match: Match;
+  match: () => Match;
   @TargetPlayer
   targetPlayer: () => Promise<"player_1" | "player_2">;
 
@@ -28,7 +28,7 @@ export class Card001 extends ActionCard {
 
     return new Stackable({
       resolution: () => {
-        new IncreaseHp(this.match[player], 5, {
+        new IncreaseHp(this.match()[player], 5, {
           type: "order",
           order: this,
         });

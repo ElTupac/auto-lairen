@@ -16,12 +16,12 @@ export class Card002 extends ActionCard {
   };
 
   @GetMatch
-  match: Match;
+  match: () => Match;
 
   async play(): Promise<Stackable> {
     return new Stackable({
       resolution: () => {
-        new DestroyAllBoardUnits(this.match.board);
+        new DestroyAllBoardUnits(this.match().board);
       },
       source: "action",
       type: "order",

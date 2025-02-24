@@ -27,4 +27,8 @@ export class ReserveArea extends Area {
 
     return cards;
   }
+
+  get availableTreasures(): number {
+    return this.content.length;
+  }
 }
