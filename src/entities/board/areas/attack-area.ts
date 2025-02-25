@@ -20,11 +20,4 @@ export class AttackArea extends Area {
 
     return cards;
   }
-  retrievePermanents(): UnitCard[] {
-    const permaments: UnitCard[] = [];
-    while (this.content.length)
-      permaments.push(this.popCardByIndex(0)[0] as UnitCard);
-
-    return permaments;
-  }
 }

@@ -33,6 +33,10 @@ export class UnitPermanent extends Permanent<UnitPermanentSchema> {
       schema,
     });
 
+    if (unitPermanent.origin_order) {
+      unitPermanent.origin_order.linkPermanent(this);
+    }
+
     this._damage_register = schema.data.damage_register as number;
     if (schema.data.state_change) {
       const {

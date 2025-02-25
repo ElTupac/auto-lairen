@@ -17,5 +17,9 @@ export class MonumentPermanent extends Permanent<MonumentPermanentSchema> {
       origin_order: monumentPermanent.origin_order,
       schema: monumentPermanent.schema,
     });
+
+    if (monumentPermanent.origin_order) {
+      monumentPermanent.origin_order.linkPermanent(this);
+    }
   }
 }

@@ -1,11 +1,11 @@
 import { randomUUID, UUID } from "crypto";
-import { KingdomCard } from "../deck/kingdom/cards";
 import { PermanentDead } from "../../commands/permanents/permanent-dead";
 import { GeneralPermanent } from "../board/permanents";
+import { KingdomCard } from "../deck/kingdom/cards";
 
 type PermanentPayload<S> = {
   origin: "monument" | "unit" | "weapon" | "unit-monument" | null;
-  origin_order: KingdomCard | null;
+  origin_order: KingdomCard<unknown> | null;
   origin_id: UUID | null;
   schema: S;
 };
@@ -13,7 +13,7 @@ type PermanentPayload<S> = {
 export abstract class Permanent<T> {
   private _id: UUID;
   private _origin: "monument" | "unit" | "weapon" | "unit-monument" | null;
-  private _origin_order: KingdomCard | null;
+  private _origin_order: KingdomCard<unknown> | null;
   private _origin_id: UUID | null;
   private _schema: T;
 

@@ -21,7 +21,10 @@ export class Card002 extends ActionCard {
   async play(): Promise<Stackable> {
     return new Stackable({
       resolution: () => {
-        new DestroyAllBoardUnits(this.match().board);
+        new DestroyAllBoardUnits(this.match().board, {
+          type: "order",
+          order: this,
+        });
       },
       source: "action",
       type: "order",

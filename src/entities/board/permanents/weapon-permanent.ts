@@ -17,5 +17,9 @@ export class WeaponPermanent extends Permanent<WeaponPermanentSchema> {
       origin_order: weaponPermanent.origin_order,
       schema: weaponPermanent.schema,
     });
+
+    if (weaponPermanent.origin_order) {
+      weaponPermanent.origin_order.linkPermanent(this);
+    }
   }
 }

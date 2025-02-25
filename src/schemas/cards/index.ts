@@ -22,4 +22,5 @@ export type PermanentSchema<T> = {
   subtype: CardSchemaSubType;
   cost: number;
   data: T;
+  permanent_type: "unit" | "monument" | "weapon";
 };
