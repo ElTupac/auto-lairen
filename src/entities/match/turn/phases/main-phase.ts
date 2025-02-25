@@ -26,9 +26,8 @@ export class MainPhase extends Phase {
               { label: "p2 entra en battle", value: "p2_to-battle" },
             ]
       ).then((answer) => {
-        console.log(answer);
         if (answer.value.includes("to-battle")) this.next_phase();
-        else this.go_to_phase(5);
+        else this.go_to_phase(6);
       });
 
     return;

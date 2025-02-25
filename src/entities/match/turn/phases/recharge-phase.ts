@@ -1,3 +1,5 @@
+import { BoardRetrievePermanents } from "../../../../commands/board/board-retrieve-permanents";
+import { BoardRetrieveTreasures } from "../../../../commands/board/board-retrieve-treasures";
 import { Phase } from "../../../extensions/phase";
 
 export class RechargePhase extends Phase {
@@ -12,11 +14,8 @@ export class RechargePhase extends Phase {
 
     const currentPlayer = this.match.getPlayerById(this.turn_player_owner_id);
     const board = this.match.board.areas[currentPlayer.name];
-    const permanentsToRetrieve = board.attack.retrievePermanents();
-    board.formation.addCards(permanentsToRetrieve);
-
-    const treasuresToRetrieve = board.out_of_use_reserve.retrieveTreasures();
-    board.reserve.addCards(treasuresToRetrieve);
+    new BoardRetrievePermanents(board);
+    new BoardRetrieveTreasures(board);
 
     if (board.reserve.content.length < 7) this.next_phase();
     if (this.turn_number !== 0) this.go_to_phase(2);

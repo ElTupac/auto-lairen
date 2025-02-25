@@ -62,6 +62,7 @@ export class Stack {
           ({ id }) => id === playerAnswer
         );
         if (order) {
+          started = false;
           return new PlayOrder(
             getCurrentMatch()[priority],
             order as KingdomCard<unknown>
