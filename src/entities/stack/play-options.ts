@@ -19,7 +19,7 @@ export class PlayOptions {
   }
 
   async chooseOption(): Promise<UUID | null> {
-    const answer = await prompt([
+    const answer = await prompt(this._player, [
       ...this._options.map(({ id, cost }) => ({
         value: id,
         label: `Carta coste ${cost}`,

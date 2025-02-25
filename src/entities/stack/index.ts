@@ -3,8 +3,9 @@ import { PlayOrder } from "../../commands/play-order";
 import { prompt } from "../../prompt";
 import { KingdomCard } from "../deck/kingdom/cards";
 import { Stackable } from "../extensions/stackable";
-import { getCurrentMatch } from "../match";
+import { Match } from "../match";
 import { PlayOptions } from "./play-options";
+import { GetMatch } from "../../decorators/get-match";
 
 let started: boolean = false;
 
@@ -27,6 +28,9 @@ export class Stack {
     return this._priority;
   }
 
+  @GetMatch
+  current_match: () => Match;
+
   private async startPriorityLoop(
     priority: "player_1" | "player_2",
     initialFlag?: boolean
@@ -39,7 +43,11 @@ export class Stack {
       const lastStackble = this._stack.pop();
       lastStackble.resolve();
     }
+
+    const playerWithPriority = this.current_match()[priority];
+
     const answer = await prompt(
+      playerWithPriority,
       priority === "player_1"
         ? [
             { label: "p1 queda quieto", value: "p1_no-stack" },
@@ -53,18 +61,16 @@ export class Stack {
 
     if (answer.value.includes("to-stack")) {
       const playerAnswer = await new Promise<UUID | null>((resolve) => {
-        new PlayOptions(getCurrentMatch()[priority])
-          .chooseOption()
-          .then(resolve);
+        new PlayOptions(playerWithPriority).chooseOption().then(resolve);
       });
       if (playerAnswer) {
-        const order = getCurrentMatch()[priority].playerHand.content.find(
+        const order = playerWithPriority.playerHand.content.find(
           ({ id }) => id === playerAnswer
         );
         if (order) {
           started = false;
           return new PlayOrder(
-            getCurrentMatch()[priority],
+            playerWithPriority,
             order as KingdomCard<unknown>
           );
         }

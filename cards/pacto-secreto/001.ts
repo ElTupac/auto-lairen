@@ -1,6 +1,9 @@
 import { IncreaseHp } from "../../src/commands/increase-hp";
 import { GetMatch } from "../../src/decorators/get-match";
-import { TargetPlayer } from "../../src/decorators/target-player";
+import {
+  TargetPlayer,
+  TargetPlayerProperty,
+} from "../../src/decorators/target-player";
 import { ActionCard } from "../../src/entities/deck/kingdom/cards/action-card";
 import { Stackable } from "../../src/entities/extensions/stackable";
 import { Match } from "../../src/entities/match";
@@ -21,10 +24,10 @@ export class Card001 extends ActionCard {
   @GetMatch
   match: () => Match;
   @TargetPlayer
-  targetPlayer: () => Promise<"player_1" | "player_2">;
+  targetPlayer: TargetPlayerProperty;
 
   async play() {
-    const player = await this.targetPlayer();
+    const player = await this.targetPlayer(this.owner);
 
     return new Stackable({
       resolution: () => {

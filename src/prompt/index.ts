@@ -1,34 +1,49 @@
-import readline from "node:readline";
+import { Player } from "../entities/player";
 
 export const PROMPT_MAXIMUM_TIME = 500;
 
-const _ = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+type Option = { value: string; label: string };
+
+export type PromptAdapter = (
+  options: Option[],
+  abortController: AbortController,
+  defaultResponse?: Option
+) => Promise<Option>;
+
+const TIME_TO_ABORT = 1000 * 30;
 
 export const prompt: (
-  options: {
-    value: string;
-    label: string;
-  }[]
-) => Promise<{
-  value: string;
-  label: string;
-}> = async (options) => {
-  const questionParts = [];
-  for (let i = 0; i < options.length; i++) {
-    questionParts.push(`${options[i].label} - ${options[i].value}\n`);
-  }
+  player: Player,
+  options: Option[],
+  defaultResponse?: Option
+) => Promise<Option> = async (player, options, defaultResponse) => {
+  const abortController = new AbortController();
+  let stoppedWaiting = false;
 
-  return new Promise<(typeof options)[0]>((resolve, reject) => {
-    _.question(questionParts.join(""), (answer) => {
-      const selectedOption = options.find(
-        ({ value }) => value === answer || answer.includes(value)
+  return new Promise<Option>(async (resolve) => {
+    const abortTimeout = setTimeout(() => {
+      stoppedWaiting = true;
+      abortController.abort();
+      resolve(defaultResponse || options[0]);
+    }, TIME_TO_ABORT);
+
+    let answer: Option | undefined = undefined;
+    do {
+      const response = await player.prompt_system(
+        options,
+        abortController,
+        defaultResponse
       );
-      if (!selectedOption) reject(new Error("Option doesn't exists"));
+      const selectedOption = options.find(
+        ({ value }) => value === response.value
+      );
 
-      resolve(selectedOption);
-    });
+      if (selectedOption) {
+        clearTimeout(abortTimeout);
+        answer = selectedOption;
+      }
+    } while (!answer && !stoppedWaiting);
+
+    if (answer) resolve(answer);
   });
 };

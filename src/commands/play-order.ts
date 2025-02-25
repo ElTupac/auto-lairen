@@ -21,13 +21,10 @@ export class PlayOrder extends Command {
     new Promise(async () => {
       const goldToUse: Gold[] = [];
 
-      console.log({ goldToUse });
-      console.log({ cardCost: card.cost });
-
       const treasuresAvailable = [...player.board.reserve.content];
       for (let i = 0; i < treasuresAvailable.length; i++) {
         const treasure = treasuresAvailable[i];
-        const useTreasure = await prompt([
+        const useTreasure = await prompt(player, [
           { label: `use ${treasure.id} to pay order`, value: "use" },
           { label: `don't`, value: "no-use" },
         ]);

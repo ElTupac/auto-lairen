@@ -16,6 +16,7 @@ export class MainPhase extends Phase {
     if (this._current_phase_number() === 5) this.next_phase();
     else
       prompt(
+        turnPlayer.player,
         turnPlayer.name === "player_1"
           ? [
               { label: "p1 no entra en battle", value: "p1_no-battle" },

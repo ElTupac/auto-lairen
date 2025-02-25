@@ -8,8 +8,35 @@ import { Card001 } from "../cards/pacto-secreto/001";
 import { Card002 } from "../cards/pacto-secreto/002";
 import { DrawInitialHand } from "./commands/draw-initial-hand";
 import { GenericTreasure } from "../cards/pacto-secreto/generic-treasure";
+import readline from "node:readline";
+import { PromptAdapter } from "./prompt";
 
-const player_1 = new Player();
+const _ = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+const prompt_system: PromptAdapter = (options, abortController) => {
+  const questionParts = [];
+  for (let i = 0; i < options.length; i++) {
+    questionParts.push(`${i} - ${options[i].label}\n`);
+  }
+
+  return new Promise<{ label: string; value: string }>((resolve) => {
+    _.question(
+      questionParts.join(""),
+      { signal: abortController.signal },
+      (answer) => {
+        const selectedOption = options[+answer] || { label: "", value: "" };
+        return resolve(selectedOption);
+      }
+    );
+  });
+};
+
+const player_1 = new Player({
+  prompt_system,
+});
 const deck_p1 = new Deck({
   kingdom: new Kingdom(player_1, [
     new Card001(),
@@ -40,7 +67,9 @@ player_1.giveDeck(deck_p1);
 player_1.deck.kingdom.shuffleContent();
 player_1.deck.vault.shuffleContent();
 
-const player_2 = new Player();
+const player_2 = new Player({
+  prompt_system,
+});
 
 const deck_p2 = new Deck({
   kingdom: new Kingdom(player_2, [
