@@ -24,7 +24,8 @@ export class Card022 extends UnitCard {
         new UnitPermanent({
           origin_id: this.id,
           origin_order: this,
-          schema: this.schema,
+          schema: { ...this.schema, permanent_type: "unit" },
+          linked_card: this,
         });
       },
       source: "unit",

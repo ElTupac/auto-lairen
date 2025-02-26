@@ -7,6 +7,7 @@ type PermanentPayload<S> = {
   origin: "monument" | "unit" | "weapon" | "unit-monument" | null;
   origin_order: KingdomCard<unknown> | null;
   origin_id: UUID | null;
+  linked_card: KingdomCard<unknown>;
   schema: S;
 };
 
@@ -16,6 +17,7 @@ export abstract class Permanent<T> {
   private _origin_order: KingdomCard<unknown> | null;
   private _origin_id: UUID | null;
   private _schema: T;
+  private _linked_card: KingdomCard<unknown>;
 
   constructor(permanent: PermanentPayload<T>) {
     this._id = randomUUID();
@@ -23,6 +25,7 @@ export abstract class Permanent<T> {
     this._origin_order = permanent.origin_order;
     this._origin_id = permanent.origin_id;
     this._schema = permanent.schema;
+    this._linked_card = permanent.linked_card;
   }
 
   get id() {
@@ -40,6 +43,9 @@ export abstract class Permanent<T> {
   get schema() {
     return this._schema;
   }
+  get linked_card() {
+    return this._linked_card;
+  }
 
   destroy(): Promise<{ success: boolean }> {
     new PermanentDead(this as GeneralPermanent);
@@ -49,75 +55,41 @@ export abstract class Permanent<T> {
     );
   }
   dead(): Promise<{ success: boolean }> {
-    if (this._origin_order?.owner) {
-      this.origin_order.owner.board.discard.moveCardToThisArea(
-        this.origin_order
-      );
-
-      return new Promise((resolve) =>
-        setTimeout(() => resolve({ success: true }), 500)
-      );
-    }
+    this.linked_card.owner.board.discard.moveCardToThisArea(this.linked_card);
 
     return new Promise((resolve) =>
-      setTimeout(() => resolve({ success: false }), 500)
+      setTimeout(() => resolve({ success: true }), 500)
     );
   }
   condemn(): Promise<{ success: boolean }> {
-    if (this.origin_order?.owner) {
-      this.origin_order.owner.board.hell.moveCardToThisArea(this.origin_order);
-
-      return new Promise((resolve) =>
-        setTimeout(() => resolve({ success: true }), 500)
-      );
-    }
+    this.linked_card.owner.board.hell.moveCardToThisArea(this.linked_card);
 
     return new Promise((resolve) =>
-      setTimeout(() => resolve({ success: false }), 500)
+      setTimeout(() => resolve({ success: true }), 500)
     );
   }
   returnHand(): Promise<{ success: boolean }> {
-    if (this.origin_order?.owner) {
-      this.origin_order.owner.playerHand.moveCardToThisArea(this.origin_order);
-
-      return new Promise((resolve) =>
-        setTimeout(() => resolve({ success: true }), 500)
-      );
-    }
+    this.linked_card.owner.playerHand.moveCardToThisArea(this.linked_card);
 
     return new Promise((resolve) =>
-      setTimeout(() => resolve({ success: false }), 500)
+      setTimeout(() => resolve({ success: true }), 500)
     );
   }
   sendToKingdomEnd(): Promise<{ success: boolean }> {
-    if (this.origin_order?.owner) {
-      this.origin_order.owner.deck.kingdom.moveCardToThisArea(
-        this.origin_order,
-        true
-      );
-
-      return new Promise((resolve) =>
-        setTimeout(() => resolve({ success: true }), 500)
-      );
-    }
+    this.linked_card.owner.deck.kingdom.moveCardToThisArea(
+      this.linked_card,
+      true
+    );
 
     return new Promise((resolve) =>
-      setTimeout(() => resolve({ success: false }), 500)
+      setTimeout(() => resolve({ success: true }), 500)
     );
   }
   sendToKingdomTop(): Promise<{ success: boolean }> {
-    if (this.origin_order?.owner) {
-      this.origin_order.owner.deck.kingdom.moveCardToThisArea(
-        this.origin_order
-      );
-
-      return new Promise((resolve) =>
-        setTimeout(() => resolve({ success: true }), 500)
-      );
-    }
+    this.linked_card.owner.deck.kingdom.moveCardToThisArea(this.linked_card);
 
     return new Promise((resolve) =>
-      setTimeout(() => resolve({ success: false }), 500)
+      setTimeout(() => resolve({ success: true }), 500)
     );
   }
 }

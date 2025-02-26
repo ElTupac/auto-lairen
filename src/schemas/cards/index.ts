@@ -1,7 +1,7 @@
 import { CardMainType } from "../../types/card-main-type.type";
 import { CardSubtypeType } from "../../types/card-subtype.type";
 
-type CardSchemaSubType =
+export type CardSchemaSubType =
   | []
   | [CardSubtypeType]
   | [CardSubtypeType, CardSubtypeType];

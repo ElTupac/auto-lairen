@@ -4,11 +4,14 @@ import { UnitPermanentSchema } from "../../../schemas/cards/unit-card.schema";
 import { PermanentDestroy } from "../../../commands/permanents/permanent-destroy";
 import { PermanentDead } from "../../../commands/permanents/permanent-dead";
 import { UnitCard } from "../../deck/kingdom/cards/unit-card";
+import { UnitGhostCard } from "../../deck/kingdom/cards/ghost-cards/unit-ghost-card";
+import { KingdomCard } from "../../deck/kingdom/cards";
 
 type UnitPermanentType = {
   origin_id: UUID;
   origin_order: UnitCard;
   schema: UnitPermanentSchema;
+  linked_card: KingdomCard<unknown> | UnitGhostCard;
 };
 
 export class UnitPermanent extends Permanent<UnitPermanentSchema> {
@@ -31,6 +34,7 @@ export class UnitPermanent extends Permanent<UnitPermanentSchema> {
       origin_id: unitPermanent.origin_id,
       origin_order: unitPermanent.origin_order,
       schema,
+      linked_card: unitPermanent.linked_card,
     });
 
     if (unitPermanent.origin_order) {

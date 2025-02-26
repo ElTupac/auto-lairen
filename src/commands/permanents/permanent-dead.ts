@@ -18,6 +18,6 @@ export class PermanentDead extends Command {
   }
 
   execute() {
-    this._permanent.destroy();
+    this._permanent.dead();
   }
 }
