@@ -10,7 +10,7 @@ export type EventMutationType = {
 export type EventType<T> = {
   id?: UUID;
   origin_type: "effect" | "order" | "permanent" | "interaction";
-  origin_order: KingdomCard | Treasure | null;
+  origin_order: KingdomCard<unknown> | Treasure | null;
   origin_permanent: GeneralPermanent | null;
   data: T;
 };
