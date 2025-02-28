@@ -1,4 +1,5 @@
 import { prompt } from "../../../../prompt";
+import { UnitCard } from "../../../deck/kingdom/cards/unit-card";
 import { Phase } from "../../../extensions/phase";
 
 export class MainPhase extends Phase {
@@ -14,22 +15,28 @@ export class MainPhase extends Phase {
     const turnPlayer = this.match.getPlayerById(this.turn_player_owner_id);
 
     if (this._current_phase_number() === 5) this.next_phase();
-    else
+    else if (
+      turnPlayer.player.board.formation.content.some(
+        (card) =>
+          card instanceof UnitCard &&
+          card.permanent_linked &&
+          card.permanent_linked.can_attack
+      )
+    ) {
       prompt(
         turnPlayer.player,
-        turnPlayer.name === "player_1"
-          ? [
-              { label: "p1 no entra en battle", value: "p1_no-battle" },
-              { label: "p1 entra en battle", value: "p1_to-battle" },
-            ]
-          : [
-              { label: "p2 no entra en battle", value: "p2_no-battle" },
-              { label: "p2 entra en battle", value: "p2_to-battle" },
-            ]
+        [
+          { label: "No entra en battle", value: "no-battle" },
+          { label: "Entrar en battle", value: "to-battle" },
+        ],
+        "phase.end-main-phase-1"
       ).then((answer) => {
-        if (answer.value.includes("to-battle")) this.next_phase();
+        if (answer.value === "to-battle") this.next_phase();
         else this.go_to_phase(6);
       });
+    } else {
+      this.go_to_phase(6);
+    }
 
     return;
   }

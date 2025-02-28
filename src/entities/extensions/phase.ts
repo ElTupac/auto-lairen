@@ -26,7 +26,7 @@ export abstract class Phase {
   protected go_to_phase: (phase_to_go: number) => void;
   protected next_phase: () => void;
 
-  private _stack: Stack;
+  protected _stack: Stack;
 
   constructor(phase: PhasePayload) {
     this._id = randomUUID();
@@ -57,8 +57,8 @@ export abstract class Phase {
   }
 
   abstract startPhase(): void;
-  endPhase() {
-    return new Promise<void>((resolve) => {
+  endPhase(): Promise<unknown> {
+    return new Promise<boolean>((resolve) => {
       this._stack = new Stack({
         priority: this.match.getPlayerById(this._turn_player_owner_id).name,
         on_close_stack: resolve,

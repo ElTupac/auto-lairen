@@ -6,6 +6,7 @@ import { PermanentDead } from "../../../commands/permanents/permanent-dead";
 import { UnitCard } from "../../deck/kingdom/cards/unit-card";
 import { UnitGhostCard } from "../../deck/kingdom/cards/ghost-cards/unit-ghost-card";
 import { KingdomCard } from "../../deck/kingdom/cards";
+import { FormationArea } from "../areas/formation-area";
 
 type UnitPermanentType = {
   origin_id: UUID;
@@ -23,6 +24,8 @@ export class UnitPermanent extends Permanent<UnitPermanentSchema> {
   private _temp_resistance_buff: number = 0;
   private _perm_strengh_buff: number = 0;
   private _perm_resistance_buff: number = 0;
+
+  private _is_dizzy: boolean = true;
 
   constructor(unitPermanent: UnitPermanentType) {
     const schema = { ...unitPermanent.schema };
@@ -77,6 +80,16 @@ export class UnitPermanent extends Permanent<UnitPermanentSchema> {
   }
   get damage_registered() {
     return this._damage_register;
+  }
+  get is_dizzy() {
+    return this._is_dizzy;
+  }
+
+  get can_attack() {
+    if (!(this.linked_card.area instanceof FormationArea)) return false;
+    if (this.is_dizzy) return false;
+
+    return true;
   }
 
   registerDamage(quantity: number) {
