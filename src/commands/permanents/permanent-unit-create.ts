@@ -4,15 +4,17 @@ import {
 } from "../../entities/board/permanents";
 import { KingdomCard } from "../../entities/deck/kingdom/cards";
 import { UnitGhostCard } from "../../entities/deck/kingdom/cards/ghost-cards/unit-ghost-card";
+import { UnitCard } from "../../entities/deck/kingdom/cards/unit-card";
 import { Area } from "../../entities/extensions/area";
 import { Command } from "../../entities/extensions/command";
 import { emitEvent } from "../../events/event-manager";
 import { CardSchemaSubType } from "../../schemas/cards";
+import { UnitCardAttributeType } from "../../types/unit-card-attribute.type";
 
 type PermanentUnitSchema = {
   cost?: number;
   data: {
-    attributes: ["realeza"] | [];
+    attributes: UnitCardAttributeType[];
     resistance: number;
     strengh: number;
   };
@@ -22,8 +24,8 @@ type PermanentUnitSchema = {
 };
 
 export class PermanentUnitCreate extends Command {
-  private _area: Area;
   private _schema: PermanentUnitSchema;
+  private _order: UnitCard;
 
   constructor(
     schema: PermanentUnitSchema,
@@ -32,11 +34,12 @@ export class PermanentUnitCreate extends Command {
       order?: KingdomCard<unknown>;
       permanent?: GeneralPermanent;
       type: "effect" | "order" | "permanent" | "interaction";
-    }
+    },
+    order?: UnitCard
   ) {
     super();
-    this._area = areaToCreate;
     this._schema = schema;
+    this._order = order || new UnitGhostCard(areaToCreate);
 
     emitEvent("permanent.unit-create", {
       origin_order: origin.order || null,
@@ -47,10 +50,9 @@ export class PermanentUnitCreate extends Command {
   }
 
   execute() {
-    const ghostOrder = new UnitGhostCard(this._area);
     const { data, name, subtype, cost = 0, description = "" } = this._schema;
     new UnitPermanent({
-      linked_card: ghostOrder,
+      linked_card: this._order,
       origin_id: null,
       origin_order: null,
       schema: {

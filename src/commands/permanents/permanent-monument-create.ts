@@ -4,6 +4,7 @@ import {
 } from "../../entities/board/permanents";
 import { KingdomCard } from "../../entities/deck/kingdom/cards";
 import { MonumentGhostCard } from "../../entities/deck/kingdom/cards/ghost-cards/monument-ghost-card";
+import { MonumentCard } from "../../entities/deck/kingdom/cards/monument-card";
 import { Area } from "../../entities/extensions/area";
 import { Command } from "../../entities/extensions/command";
 import { emitEvent } from "../../events/event-manager";
@@ -18,8 +19,8 @@ type PermanentMonumentSchema = {
 };
 
 export class PermanentMonumentCreate extends Command {
-  private _area: Area;
   private _schema: PermanentMonumentSchema;
+  private _order: MonumentCard;
 
   constructor(
     schema: PermanentMonumentSchema,
@@ -28,11 +29,12 @@ export class PermanentMonumentCreate extends Command {
       order?: KingdomCard<unknown>;
       permanent?: GeneralPermanent;
       type: "effect" | "order" | "permanent" | "interaction";
-    }
+    },
+    order?: MonumentCard
   ) {
     super();
-    this._area = areaToCreate;
     this._schema = schema;
+    this._order = order || new MonumentGhostCard(areaToCreate);
 
     emitEvent("permanent.monument-create", {
       origin_order: origin.order || null,
@@ -43,10 +45,9 @@ export class PermanentMonumentCreate extends Command {
   }
 
   execute() {
-    const ghostOrder = new MonumentGhostCard(this._area);
     const { data, name, subtype, cost = 0, description = "" } = this._schema;
     new MonumentPermanent({
-      linked_card: ghostOrder,
+      linked_card: this._order,
       origin_id: null,
       origin_order: null,
       schema: {

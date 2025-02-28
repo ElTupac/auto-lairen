@@ -1,6 +1,6 @@
 import { BoardMoveCardToArea } from "../../src/commands/board/board-move-card-to-area";
+import { PermanentUnitCreate } from "../../src/commands/permanents/permanent-unit-create";
 import { CardEnterField } from "../../src/decorators/card-enter-field";
-import { UnitPermanent } from "../../src/entities/board/permanents";
 import { UnitCard } from "../../src/entities/deck/kingdom/cards/unit-card";
 import { Stackable } from "../../src/entities/extensions/stackable";
 import { CardSchema } from "../../src/schemas/cards";
@@ -23,12 +23,16 @@ export class Card022 extends UnitCard {
 
   @CardEnterField()
   permanent() {
-    new UnitPermanent({
-      origin_id: this.id,
-      origin_order: this,
-      schema: { ...this.schema, permanent_type: "unit" },
-      linked_card: this,
-    });
+    new PermanentUnitCreate(
+      this.schema,
+      this.area,
+      {
+        type: "order",
+        order: this,
+        permanent: null,
+      },
+      this
+    );
   }
 
   async play(): Promise<Stackable> {
