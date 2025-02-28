@@ -8,11 +8,9 @@ export class PlayOptions {
   private _options: KingdomCard<unknown>[];
 
   constructor(player: Player) {
-    // TODO: ask to player
     this._player = player;
 
-    // TODO: better search method
-    // also TODO: check if has stack running and is playable with it
+    // TODO: Add activate effects to search
     this._options = (
       this._player.playerHand.content as KingdomCard<unknown>[]
     ).filter(({ is_playable }) => is_playable);
@@ -20,14 +18,14 @@ export class PlayOptions {
 
   async chooseOption(): Promise<UUID | null> {
     const answer = await prompt(this._player, [
-      ...this._options.map(({ id, cost }) => ({
-        value: id,
-        label: `Carta coste ${cost}`,
-      })),
       {
         label: "Ninguna",
         value: "none",
       },
+      ...this._options.map(({ id, cost, schema }) => ({
+        value: id,
+        label: `Carta ${schema.name} coste ${cost}`,
+      })),
     ]);
 
     if (answer.value === "none") return null;

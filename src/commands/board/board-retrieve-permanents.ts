@@ -2,6 +2,7 @@ import { PlayerOwnBoard } from "../../entities/board";
 import { UnitCard } from "../../entities/deck/kingdom/cards/unit-card";
 import { Command } from "../../entities/extensions/command";
 import { emitEvent } from "../../events/event-manager";
+import { BoardMoveCardToArea } from "./board-move-card-to-area";
 
 export class BoardRetrievePermanents extends Command {
   private _board: PlayerOwnBoard;
@@ -24,7 +25,11 @@ export class BoardRetrievePermanents extends Command {
       (card) => card instanceof UnitCard
     );
     for (let i = 0; i < permanentsToRetrieve.length; i++) {
-      this._board.formation.moveCardToThisArea(permanentsToRetrieve[i]);
+      new BoardMoveCardToArea(permanentsToRetrieve[i], this._board.formation, {
+        type: "interaction",
+        order: null,
+        permanent: null,
+      });
     }
   }
 }

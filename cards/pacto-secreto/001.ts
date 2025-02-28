@@ -1,29 +1,25 @@
 import { IncreaseHp } from "../../src/commands/increase-hp";
-import { GetMatch } from "../../src/decorators/get-match";
 import {
   TargetPlayer,
   TargetPlayerProperty,
 } from "../../src/decorators/target-player";
 import { ActionCard } from "../../src/entities/deck/kingdom/cards/action-card";
 import { Stackable } from "../../src/entities/extensions/stackable";
-import { Match } from "../../src/entities/match";
+import { CardSchema } from "../../src/schemas/cards";
 import { ActionCardSchema } from "../../src/schemas/cards/action-card.schema";
 
 export class Card001 extends ActionCard {
-  schema: ActionCardSchema = {
+  schema: CardSchema<ActionCardSchema> = {
     cost: 1,
     name: "Agua en el desierto",
     description: "El jugador objetivo gana 5 vidas.",
     subtype: [],
     type: "action",
-    data: {
-      attributes: ["quick"],
-    },
+    attributes: ["quick"],
+    data: {},
   };
 
-  @GetMatch
-  match: () => Match;
-  @TargetPlayer
+  @TargetPlayer()
   targetPlayer: TargetPlayerProperty;
 
   async play() {

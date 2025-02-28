@@ -6,11 +6,14 @@ export type CardSchemaSubType =
   | [CardSubtypeType]
   | [CardSubtypeType, CardSubtypeType];
 
+export type CardAttributes = "quick";
+
 export type CardSchema<T> = {
   type: CardMainType;
   name: string;
   description: string;
   subtype: CardSchemaSubType;
+  attributes?: CardAttributes[];
   cost: number;
   data: T;
 };

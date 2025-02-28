@@ -1,24 +1,19 @@
 import { PermanentUnitCreate } from "../../src/commands/permanents/permanent-unit-create";
-import { GetMatch } from "../../src/decorators/get-match";
 import { ActionCard } from "../../src/entities/deck/kingdom/cards/action-card";
 import { Stackable } from "../../src/entities/extensions/stackable";
-import { Match } from "../../src/entities/match";
+import { CardSchema } from "../../src/schemas/cards";
 import { ActionCardSchema } from "../../src/schemas/cards/action-card.schema";
 
 export class Card011 extends ActionCard {
-  schema: ActionCardSchema = {
+  schema: CardSchema<ActionCardSchema> = {
     cost: 4,
     name: "Refuerzos",
     description: "Crea cuatro fichas de soldado 1/1.",
     subtype: [],
     type: "action",
-    data: {
-      attributes: ["quick"],
-    },
+    attributes: ["quick"],
+    data: {},
   };
-
-  @GetMatch
-  match: () => Match;
 
   async play() {
     return new Stackable({

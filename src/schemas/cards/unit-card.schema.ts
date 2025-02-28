@@ -1,11 +1,11 @@
-import { CardSchema, PermanentSchema } from ".";
+import { PermanentSchema } from ".";
 import { UnitCardAttributeType } from "../../types/unit-card-attribute.type";
 
-export type UnitCardSchema = CardSchema<{
+export type UnitCardSchema = {
   attributes: UnitCardAttributeType[];
   strengh: number;
   resistance: number;
-}>;
+};
 
 export type UnitPermanentSchema = PermanentSchema<{
   attributes: UnitCardAttributeType[];

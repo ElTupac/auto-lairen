@@ -3,10 +3,16 @@ import { KingdomCard } from "../entities/deck/kingdom/cards";
 import { Command } from "../entities/extensions/command";
 import { Player } from "../entities/player";
 import { emitEvent } from "../events/event-manager";
+import { BoardMoveCardToArea } from "./board/board-move-card-to-area";
 
 export class DiscardCard extends Command {
   private _player: Player;
   private _card: KingdomCard<unknown>;
+  private _origin: {
+    order?: KingdomCard<unknown>;
+    permanent?: GeneralPermanent;
+    type: "effect" | "order" | "permanent" | "interaction";
+  };
 
   constructor(
     player: Player,
@@ -20,6 +26,7 @@ export class DiscardCard extends Command {
     super();
     this._card = card;
     this._player = player;
+    this._origin = origin;
 
     if (card.owner.id !== player.id)
       throw new Error("Card to discard must be from same player");
@@ -33,6 +40,10 @@ export class DiscardCard extends Command {
   }
 
   execute() {
-    this._player.board.discard.moveCardToThisArea(this._card);
+    new BoardMoveCardToArea(this._card, this._player.board.discard, {
+      type: this._origin.type,
+      order: this._origin.order,
+      permanent: this._origin.permanent,
+    });
   }
 }

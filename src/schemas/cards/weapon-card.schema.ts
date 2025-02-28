@@ -1,10 +1,10 @@
-import { CardSchema, PermanentSchema } from ".";
+import { PermanentSchema } from ".";
 
-export type WeaponCardSchema = CardSchema<{
+export type WeaponCardSchema = {
   endurance: number;
   strengh_buff: number;
   resistance_buff: number;
-}>;
+};
 
 export type WeaponPermanentSchema = PermanentSchema<{
   endurance: number;

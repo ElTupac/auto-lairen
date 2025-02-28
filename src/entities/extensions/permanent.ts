@@ -2,6 +2,7 @@ import { randomUUID, UUID } from "crypto";
 import { PermanentDead } from "../../commands/permanents/permanent-dead";
 import { GeneralPermanent } from "../board/permanents";
 import { KingdomCard } from "../deck/kingdom/cards";
+import { BoardMoveCardToArea } from "../../commands/board/board-move-card-to-area";
 
 type PermanentPayload<S> = {
   origin: "monument" | "unit" | "weapon" | "unit-monument" | null;
@@ -26,6 +27,8 @@ export abstract class Permanent<T> {
     this._origin_id = permanent.origin_id;
     this._schema = permanent.schema;
     this._linked_card = permanent.linked_card;
+
+    // TODO: emit event of permanent created
   }
 
   get id() {
@@ -55,29 +58,59 @@ export abstract class Permanent<T> {
     );
   }
   dead(): Promise<{ success: boolean }> {
-    this.linked_card.owner.board.discard.moveCardToThisArea(this.linked_card);
+    new BoardMoveCardToArea(
+      this.linked_card,
+      this.linked_card.owner.board.discard,
+      {
+        type: "interaction",
+        order: null,
+        permanent: null,
+      }
+    );
 
     return new Promise((resolve) =>
       setTimeout(() => resolve({ success: true }), 500)
     );
   }
   condemn(): Promise<{ success: boolean }> {
-    this.linked_card.owner.board.hell.moveCardToThisArea(this.linked_card);
+    new BoardMoveCardToArea(
+      this.linked_card,
+      this.linked_card.owner.board.hell,
+      {
+        type: "interaction",
+        order: null,
+        permanent: null,
+      }
+    );
 
     return new Promise((resolve) =>
       setTimeout(() => resolve({ success: true }), 500)
     );
   }
   returnHand(): Promise<{ success: boolean }> {
-    this.linked_card.owner.playerHand.moveCardToThisArea(this.linked_card);
+    new BoardMoveCardToArea(
+      this.linked_card,
+      this.linked_card.owner.playerHand,
+      {
+        type: "interaction",
+        order: null,
+        permanent: null,
+      }
+    );
 
     return new Promise((resolve) =>
       setTimeout(() => resolve({ success: true }), 500)
     );
   }
   sendToKingdomEnd(): Promise<{ success: boolean }> {
-    this.linked_card.owner.deck.kingdom.moveCardToThisArea(
+    new BoardMoveCardToArea(
       this.linked_card,
+      this.linked_card.owner.deck.kingdom,
+      {
+        type: "interaction",
+        order: null,
+        permanent: null,
+      },
       true
     );
 
@@ -86,7 +119,15 @@ export abstract class Permanent<T> {
     );
   }
   sendToKingdomTop(): Promise<{ success: boolean }> {
-    this.linked_card.owner.deck.kingdom.moveCardToThisArea(this.linked_card);
+    new BoardMoveCardToArea(
+      this.linked_card,
+      this.linked_card.owner.deck.kingdom,
+      {
+        type: "interaction",
+        order: null,
+        permanent: null,
+      }
+    );
 
     return new Promise((resolve) =>
       setTimeout(() => resolve({ success: true }), 500)

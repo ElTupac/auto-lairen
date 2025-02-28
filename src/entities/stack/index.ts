@@ -28,7 +28,11 @@ export class Stack {
     return this._priority;
   }
 
-  @GetMatch
+  get stack_is_clean() {
+    return !this._stack.length;
+  }
+
+  @GetMatch()
   current_match: () => Match;
 
   private async startPriorityLoop(

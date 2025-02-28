@@ -26,7 +26,7 @@ export class PayOrderCost extends Command {
     });
   }
 
-  @GetMatch
+  @GetMatch()
   match: () => Match;
 
   execute() {

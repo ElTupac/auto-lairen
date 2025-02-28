@@ -4,6 +4,7 @@ import { Treasure } from "../entities/extensions/treasure";
 import { Gold } from "../entities/gold";
 import { Player } from "../entities/player";
 import { emitEvent } from "../events/event-manager";
+import { BoardMoveCardToArea } from "./board/board-move-card-to-area";
 
 export class UseTreasure extends Command {
   private _player: Player;
@@ -35,7 +36,16 @@ export class UseTreasure extends Command {
   }
 
   execute() {
-    this._player.board.out_of_use_reserve.moveCardToThisArea(this._treasure);
+    new BoardMoveCardToArea(
+      this._treasure,
+      this._player.board.out_of_use_reserve,
+      {
+        type: "interaction",
+        order: null,
+        permanent: null,
+      }
+    );
+
     this._goldFn([new Gold()]);
   }
 }

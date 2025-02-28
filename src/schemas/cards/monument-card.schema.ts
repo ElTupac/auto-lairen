@@ -1,5 +1,5 @@
-import { CardSchema, PermanentSchema } from ".";
+import { PermanentSchema } from ".";
 
-export type MonumentCardSchema = CardSchema<{}>;
+export type MonumentCardSchema = {};
 
 export type MonumentPermanentSchema = PermanentSchema<{}>;
