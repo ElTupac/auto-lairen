@@ -7,6 +7,7 @@ import { DrawInitialHand } from "./commands/draw-initial-hand";
 import readline from "node:readline";
 import { PromptAdapter } from "./prompt";
 import { createDeckCards, createVaultCards } from "../testing-utils";
+import { MatchStart } from "./commands/match/match-start";
 
 const _ = readline.createInterface({
   input: process.stdin,
@@ -63,8 +64,8 @@ new DrawInitialHand(player_2);
 
 // TODO: Mulligan step
 
-new Match({
-  first_turn: "player_1",
+const match = new Match({
   player_1,
   player_2,
 });
+new MatchStart(match);
