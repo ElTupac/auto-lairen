@@ -39,6 +39,8 @@ export class Stack {
     priority: "player_1" | "player_2",
     initialFlag?: boolean
   ) {
+    if (this.current_match().paused) return;
+
     if (!initialFlag && priority === this.priority) {
       if (!this._stack.length) {
         started = false;
@@ -90,6 +92,11 @@ export class Stack {
       started = true;
       this.startPriorityLoop(this.priority, true);
     }
+  }
+
+  resumeStackIntervention() {
+    if (!started) this.startStackIntervention();
+    else this.startPriorityLoop(this.priority);
   }
 
   tacTheStack(stackable: Stackable) {

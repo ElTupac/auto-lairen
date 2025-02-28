@@ -28,6 +28,7 @@ export class Match {
   resume() {
     if (this.paused) {
       this._paused = false;
+      this.current_turn.currentPhase.stack.resumeStackIntervention();
     }
   }
 
