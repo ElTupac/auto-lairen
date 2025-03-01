@@ -1,8 +1,20 @@
 import { prompt } from "../../../../../prompt";
+import { UnitCard } from "../../../../deck/kingdom/cards/unit-card";
 import { Phase } from "../../../../extensions/phase";
+import { SubPhase } from "../../../../extensions/sub-phase";
+import { Stack } from "../../../../stack";
+import { AttackersSubPhase } from "./attackers-sub-phase";
+import { DamageResolutionSubPhase } from "./damage-resolution-sub-phase";
+import { BlockersSubPhase } from "./defenders-sub-phase";
 
 export class BattlePhase extends Phase {
   name = "battle-phase";
+
+  private _current_sub_phase: SubPhase | undefined = undefined;
+
+  get current_sub_phase() {
+    return this._current_sub_phase;
+  }
 
   startPhase() {
     console.log(
@@ -11,30 +23,118 @@ export class BattlePhase extends Phase {
       }: ${this.turn_player_owner_id}`
     );
 
-    // TODO: Resolver todas las sub fases aca adentro y mandar para next_phase una vez cerrado
+    const damageResolutionSubPhase = () => {
+      const turnPlayer = this.match.getPlayerById(this.turn_player_owner_id);
 
-    const turnPlayer = this.match.getPlayerById(this.turn_player_owner_id);
+      this._current_sub_phase = new DamageResolutionSubPhase({
+        on_finish: () => {
+          const turnPlayer = this.match.getPlayerById(
+            this.turn_player_owner_id
+          );
+          new Stack({
+            priority: turnPlayer.name,
+            on_close_stack: this.next_phase,
+          });
+        },
+        priority_player: turnPlayer.name,
+      });
+    };
 
-    prompt(
-      turnPlayer.player,
-      [
-        {
-          label: "Declarar atacantes",
-          value: "go-attack",
-        },
-        {
-          label: "Terminar fase",
-          value: "end-phase",
-        },
-        {
-          label: "Apilar",
-          value: "stack",
-        },
-      ],
-      "sub-phase.declare-attacker"
-    ).then((answer) => {
-      if (answer.value === "end-phase") this.next_phase();
-    });
+    const blockersSubPhase = () => {
+      const turnPlayer = this.match.getPlayerById(this.turn_player_owner_id);
+
+      this._current_sub_phase = new BlockersSubPhase({
+        on_finish: damageResolutionSubPhase,
+        priority_player:
+          turnPlayer.name === "player_1" ? "player_2" : "player_1",
+      });
+    };
+
+    const attackersSubPhase = () => {
+      const turnPlayer = this.match.getPlayerById(this.turn_player_owner_id);
+
+      this._current_sub_phase = new AttackersSubPhase({
+        on_finish: blockersSubPhase,
+        on_cancel: this.next_phase,
+        priority_player: turnPlayer.name,
+      });
+    };
+
+    let hasOpenedStackAndCloseClean: boolean = false;
+
+    const turnInit = () => {
+      const turnPlayer = this.match.getPlayerById(this.turn_player_owner_id);
+      const availableAttackers =
+        turnPlayer.player.board.formation.content.filter(
+          (card) =>
+            card instanceof UnitCard &&
+            card.permanent_linked &&
+            card.permanent_linked.can_attack
+        );
+
+      prompt(
+        turnPlayer.player,
+        [
+          {
+            label: "Terminar fase",
+            value: "end-phase",
+          },
+          ...(availableAttackers.length > 0
+            ? [
+                {
+                  label: "Declarar atacantes",
+                  value: "declare-attackers",
+                },
+              ]
+            : []),
+          ...(!hasOpenedStackAndCloseClean
+            ? [
+                {
+                  label: "Apilar",
+                  value: "stack",
+                },
+              ]
+            : []),
+        ],
+        "sub-phase.declare-attacker"
+      ).then((answer) => {
+        if (answer.value === "end-phase") {
+          return new Stack({
+            priority: turnPlayer.name,
+            on_close_stack: (hasResolvedElement) => {
+              if (!hasResolvedElement) this.next_phase();
+              else {
+                hasOpenedStackAndCloseClean = false;
+                turnInit();
+              }
+            },
+            cut_first_priority_if_clean: true,
+          });
+        } else if (answer.value === "declare-attackers") {
+          return new Stack({
+            priority: turnPlayer.name === "player_1" ? "player_2" : "player_1",
+            on_close_stack: (hasResolvedElement) => {
+              if (!hasResolvedElement) attackersSubPhase();
+              else {
+                hasOpenedStackAndCloseClean = false;
+                turnInit();
+              }
+            },
+            cut_first_priority_if_clean: true,
+          });
+        } else if (answer.value === "stack") {
+          return new Stack({
+            priority: turnPlayer.name,
+            on_close_stack: (hasResolvedElement) => {
+              if (!hasResolvedElement) hasOpenedStackAndCloseClean = true;
+
+              turnInit();
+            },
+            cut_first_priority_if_clean: true,
+          });
+        }
+      });
+    };
 
     return;
   }

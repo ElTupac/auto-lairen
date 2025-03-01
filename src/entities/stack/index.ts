@@ -14,13 +14,17 @@ export class Stack {
   private _on_close_stack: (hasResolvedElement?: boolean) => void;
   private _stack: Stackable[] = [];
   private _has_resolved_elements: boolean = false;
+  private _cut_first_priority_if_clean: boolean = false;
 
   constructor(stack: {
     priority: "player_1" | "player_2";
     on_close_stack: (hasResolvedElement: boolean) => void;
+    cut_first_priority_if_clean?: boolean;
   }) {
     this._priority = stack.priority;
     this._on_close_stack = stack.on_close_stack;
+    if (stack.cut_first_priority_if_clean)
+      this._cut_first_priority_if_clean = true;
 
     this.startStackIntervention();
   }
@@ -31,6 +35,10 @@ export class Stack {
 
   get stack_is_clean() {
     return !this._stack.length;
+  }
+
+  get cut_first_priority_if_clean() {
+    return this._cut_first_priority_if_clean;
   }
 
   @GetMatch()
@@ -83,6 +91,14 @@ export class Stack {
           );
         }
       }
+    } else if (
+      answer.value.includes("no-stack") &&
+      this.cut_first_priority_if_clean &&
+      priority === this.priority &&
+      this.stack_is_clean &&
+      !this._has_resolved_elements
+    ) {
+      return this._on_close_stack(this._has_resolved_elements);
     }
 
     if (priority === "player_1") return this.startPriorityLoop("player_2");

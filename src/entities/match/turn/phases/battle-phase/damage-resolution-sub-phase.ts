@@ -1,3 +1,10 @@
 import { SubPhase } from "../../../../extensions/sub-phase";
 
-export class DamageResolutionSubPhase extends SubPhase {}
+export class DamageResolutionSubPhase extends SubPhase {
+  constructor(payload: {
+    on_finish: () => void;
+    priority_player: "player_1" | "player_2";
+  }) {
+    super(payload.priority_player, payload.on_finish);
+  }
+}
