@@ -39,4 +39,7 @@ export abstract class Card<T> {
   get owner() {
     return this._owner;
   }
+  get controller() {
+    return this._controller;
+  }
 }

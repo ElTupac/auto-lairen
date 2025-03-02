@@ -7,4 +7,6 @@ export class BlockersSubPhase extends SubPhase {
   }) {
     super(payload.priority_player, payload.on_finish);
   }
+
+  startTurn() {}
 }

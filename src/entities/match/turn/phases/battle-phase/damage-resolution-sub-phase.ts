@@ -7,4 +7,6 @@ export class DamageResolutionSubPhase extends SubPhase {
   }) {
     super(payload.priority_player, payload.on_finish);
   }
+
+  startTurn() {}
 }

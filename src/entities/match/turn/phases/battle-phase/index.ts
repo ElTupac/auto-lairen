@@ -12,8 +12,14 @@ export class BattlePhase extends Phase {
 
   private _current_sub_phase: SubPhase | undefined = undefined;
 
+  private _attackers_declared: UnitCard[] | null = null;
+
   get current_sub_phase() {
     return this._current_sub_phase;
+  }
+
+  get attackers_declared(): UnitCard[] {
+    return this._attackers_declared || [];
   }
 
   startPhase() {
@@ -54,7 +60,10 @@ export class BattlePhase extends Phase {
       const turnPlayer = this.match.getPlayerById(this.turn_player_owner_id);
 
       this._current_sub_phase = new AttackersSubPhase({
-        on_finish: blockersSubPhase,
+        on_finish: (attackersDeclared) => {
+          this._attackers_declared = attackersDeclared;
+          blockersSubPhase();
+        },
         on_cancel: this.next_phase,
         priority_player: turnPlayer.name,
       });
