@@ -9,12 +9,6 @@ const listenersSubscribers: Partial<{
     id: UUID;
   }[];
 }> = {};
-const replacersSubscribers: Partial<{
-  [P in keyof EventsDefinitions]: {
-    fn: EventsDefinitions[P];
-    id: UUID;
-  }[];
-}> = {};
 
 export const registerListener: <K extends keyof EventsDefinitions>(
   eventName: K,
@@ -38,10 +32,17 @@ export const registerListener: <K extends keyof EventsDefinitions>(
         // @ts-expect-error
         listenersSubscribers[event_name] = listenersSubscribers[
           event_name
-        ].filter(({ id }) => id === listener.id);
+        ].filter(({ id }) => id !== listener.id);
     },
   };
 };
+
+const replacersSubscribers: Partial<{
+  [P in keyof EventsDefinitions]: {
+    fn: EventsDefinitions[P];
+    id: UUID;
+  }[];
+}> = {};
 
 export const registerReplacer: <K extends keyof EventsDefinitions>(
   eventName: K,
@@ -65,7 +66,7 @@ export const registerReplacer: <K extends keyof EventsDefinitions>(
         // @ts-expect-error
         replacersSubscribers[event_name] = replacersSubscribers[
           event_name
-        ].filter(({ id }) => id === replacer.id);
+        ].filter(({ id }) => id !== replacer.id);
     },
   };
 };

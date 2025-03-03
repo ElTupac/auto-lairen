@@ -53,6 +53,7 @@ export class BattlePhase extends Phase {
         on_finish: damageResolutionSubPhase,
         priority_player:
           turnPlayer.name === "player_1" ? "player_2" : "player_1",
+        declared_attackers: this.attackers_declared,
       });
     };
 

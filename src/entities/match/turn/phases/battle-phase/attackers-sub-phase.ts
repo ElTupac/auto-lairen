@@ -1,7 +1,7 @@
 import { Match } from "../../..";
 import { BattleDeclareAttackers } from "../../../../../commands/battle/battle-declare-attackers";
 import { GetMatch } from "../../../../../decorators/get-match";
-import { prompt } from "../../../../../prompt";
+import { multipleOptionPrompt } from "../../../../../prompt";
 import { UnitCard } from "../../../../deck/kingdom/cards/unit-card";
 import { SubPhase } from "../../../../extensions/sub-phase";
 
@@ -28,28 +28,23 @@ export class AttackersSubPhase extends SubPhase {
         card.permanent_linked.can_attack
     ) as UnitCard[];
 
-    prompt(
+    multipleOptionPrompt(
       turnPlayer,
-      [
-        {
-          label: "Terminar fase",
-          value: "end-phase",
-        },
-        ...(availableAttackers.length > 0
-          ? [
-              {
-                label: "Elegir atacantes",
-                value: availableAttackers.map(({ id }) => id).join("||"),
-              },
-            ]
-          : []),
-      ],
+      availableAttackers.map(({ id, schema, permanent_linked }) => ({
+        value: id,
+        label: `${schema.name} (${permanent_linked.actual_strength} - ${permanent_linked.actual_resistance})`,
+      })),
+      {
+        label: "Terminar fase",
+        value: "end-phase",
+      },
       "sub-phase.declare-attacker"
     ).then((answer) => {
-      if (answer.value === "end-phase") return this._on_cancel();
+      if (answer.some(({ value }) => value === "end-phase"))
+        return this._on_cancel();
       else {
-        const attackers = availableAttackers.filter(({ id }) =>
-          answer.value.split("||").includes(id)
+        const attackers = availableAttackers.filter((unit) =>
+          answer.some(({ value }) => unit.id === value)
         );
         new BattleDeclareAttackers(attackers, this._on_finish);
       }

@@ -8,25 +8,47 @@ import readline from "node:readline";
 import { PromptAdapter } from "./prompt";
 import { createDeckCards, createVaultCards } from "../testing-utils";
 import { MatchStart } from "./commands/match/match-start";
+import { Option } from "./prompt/prompt-type";
 
 const _ = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-const prompt_system: PromptAdapter = (options, abortController) => {
+const prompt_system: PromptAdapter = (
+  options,
+  abortController,
+  defaultResponse,
+  multipleChoice
+) => {
   const questionParts = [];
-  for (let i = 0; i < options.length; i++) {
+  if (defaultResponse) questionParts.push(`0 - ${defaultResponse.label}\n`);
+  for (let i = 1; i <= options.length; i++) {
     questionParts.push(`${i} - ${options[i].label}\n`);
   }
 
-  return new Promise<{ label: string; value: string }>((resolve) => {
+  return new Promise<{ label: string; value: string }[]>((resolve) => {
     _.question(
       questionParts.join(""),
       { signal: abortController.signal },
       (answer) => {
-        const selectedOption = options[+answer] || { label: "", value: "" };
-        return resolve(selectedOption);
+        const answers = answer.split(",").map((option) => option.trim());
+        if (multipleChoice) {
+          let selectedOptions: Option[] = [];
+          for (let i = 0; i < answers.length; i++) {
+            if (+answers[i] === 0) {
+              selectedOptions = [defaultResponse];
+              break;
+            } else {
+              const option = options[+answers[i] - 1];
+              selectedOptions.push(option);
+            }
+          }
+          return resolve(selectedOptions);
+        } else {
+          if (+answers[0] === 0) return resolve([defaultResponse]);
+          return resolve([options[+answers[0] - 1]]);
+        }
       }
     );
   });
