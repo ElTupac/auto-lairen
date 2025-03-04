@@ -1,4 +1,5 @@
 import { prompt } from "../../../../../prompt";
+import { BattleAttackBlockStrategy } from "../../../../battle-attack-block-strategy";
 import { UnitCard } from "../../../../deck/kingdom/cards/unit-card";
 import { Phase } from "../../../../extensions/phase";
 import { SubPhase } from "../../../../extensions/sub-phase";
@@ -14,12 +15,18 @@ export class BattlePhase extends Phase {
 
   private _attackers_declared: UnitCard[] | null = null;
 
+  private _blocking_strategy: BattleAttackBlockStrategy | null = null;
+
   get current_sub_phase() {
     return this._current_sub_phase;
   }
 
   get attackers_declared(): UnitCard[] {
     return this._attackers_declared || [];
+  }
+
+  get blocking_strategy(): BattleAttackBlockStrategy {
+    return this._blocking_strategy;
   }
 
   startPhase() {
@@ -50,7 +57,13 @@ export class BattlePhase extends Phase {
       const turnPlayer = this.match.getPlayerById(this.turn_player_owner_id);
 
       this._current_sub_phase = new BlockersSubPhase({
-        on_finish: damageResolutionSubPhase,
+        on_finish: (blocking_strategy) => {
+          this._blocking_strategy = blocking_strategy;
+          new Stack({
+            priority: turnPlayer.name,
+            on_close_stack: damageResolutionSubPhase,
+          });
+        },
         priority_player:
           turnPlayer.name === "player_1" ? "player_2" : "player_1",
         declared_attackers: this.attackers_declared,
@@ -63,7 +76,10 @@ export class BattlePhase extends Phase {
       this._current_sub_phase = new AttackersSubPhase({
         on_finish: (attackersDeclared) => {
           this._attackers_declared = attackersDeclared;
-          blockersSubPhase();
+          new Stack({
+            priority: turnPlayer.name,
+            on_close_stack: blockersSubPhase,
+          });
         },
         on_cancel: this.next_phase,
         priority_player: turnPlayer.name,
