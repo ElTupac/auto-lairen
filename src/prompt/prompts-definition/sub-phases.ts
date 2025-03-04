@@ -7,5 +7,7 @@ export type SubPhasePromptsDefinition = {
   "sub-phase.choose-blockers-for-attacker": PromptDefinition;
   "sub-phase.end-declare-attackers": PromptDefinition;
   "sub-phase.end-declare-blockers": PromptDefinition;
+  "sub-phase.choose-target-for-damage-distribution": PromptDefinition;
+  "sub-phase.choose-damage-distribution": PromptDefinition;
   "sub-phase.end-damage-resolution": PromptDefinition;
 };

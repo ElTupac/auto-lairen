@@ -50,6 +50,7 @@ export class BattlePhase extends Phase {
           });
         },
         priority_player: turnPlayer.name,
+        blocking_strategy: this._blocking_strategy,
       });
     };
 
