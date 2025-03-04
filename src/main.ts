@@ -24,7 +24,7 @@ const prompt_system: PromptAdapter = (
   const questionParts = [];
   if (defaultResponse) questionParts.push(`0 - ${defaultResponse.label}\n`);
   for (let i = 1; i <= options.length; i++) {
-    questionParts.push(`${i} - ${options[i].label}\n`);
+    questionParts.push(`${i} - ${options[i - 1].label}\n`);
   }
 
   return new Promise<{ label: string; value: string }[]>((resolve) => {
