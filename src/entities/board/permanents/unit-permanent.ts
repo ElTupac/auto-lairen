@@ -26,6 +26,9 @@ export class UnitPermanent extends Permanent<UnitPermanentSchema> {
   private _perm_resistance_buff: number = 0;
 
   private _is_dizzy: boolean = true;
+  private _units_to_block: number = 1;
+  private _evasion: boolean = false;
+  private _ghost: boolean = false;
 
   constructor(unitPermanent: UnitPermanentType) {
     const schema = { ...unitPermanent.schema };
@@ -84,11 +87,35 @@ export class UnitPermanent extends Permanent<UnitPermanentSchema> {
   get is_dizzy() {
     return this._is_dizzy;
   }
+  get evasion() {
+    return this._evasion;
+  }
+  get ghost() {
+    return this._ghost;
+  }
 
   get can_attack() {
     if (!(this.linked_card.area instanceof FormationArea)) return false;
     if (this.is_dizzy) return false;
 
+    return true;
+  }
+  can_block(units: UnitCard[]): boolean {
+    if (units.length > this._units_to_block) return false;
+    if (
+      units.some(
+        ({ permanent_linked }) => permanent_linked && permanent_linked.evasion
+      ) &&
+      !this.evasion
+    )
+      return false;
+    if (
+      units.some(
+        ({ permanent_linked }) => permanent_linked && permanent_linked.ghost
+      ) &&
+      !this.ghost
+    )
+      return false;
     return true;
   }
 
