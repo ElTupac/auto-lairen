@@ -18,7 +18,7 @@ export class DamageResolutionSubPhase extends SubPhase {
   private _attackers_damage_assignment: {
     blocker: UnitCard;
     attackers: {
-      unit: UnitCard[];
+      unit: UnitCard;
       damage: number;
     }[];
   }[] = [];
@@ -262,7 +262,7 @@ export class DamageResolutionSubPhase extends SubPhase {
       for (let i = 0; i < this._blocking_strategy.strategy.length; i++) {
         const { attacker, blockers } = this._blocking_strategy.strategy[i];
 
-        for (let j = 0; j < blockers.length; i++) {
+        for (let j = 0; j < blockers.length; j++) {
           const currentBlocker = blockers[j];
           const indexOfBlocker = attackers_damage_assignment.findIndex(
             ({ blocker }) => blocker.id === currentBlocker.id
@@ -313,6 +313,11 @@ export class DamageResolutionSubPhase extends SubPhase {
   async startTurn() {
     await this.startBlockersDamageAssignment();
     await this.startAttackersDamageAssignment();
-    new BattleResolve();
+    new BattleResolve(
+      this._attackers_damage_assignment,
+      this._blockers_damage_assignment
+    );
+
+    this._on_finish();
   }
 }
