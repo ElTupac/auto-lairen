@@ -252,7 +252,6 @@ export class DamageResolutionSubPhase extends SubPhase {
 
   private startAttackersDamageAssignment() {
     return new Promise<void>(async (resolve) => {
-      // TODO: build the mapping loop for getting the blockers and target attackers to deal damage
       const attackers_damage_assignment: {
         blocker: UnitCard;
         attackers: {
@@ -260,6 +259,38 @@ export class DamageResolutionSubPhase extends SubPhase {
           damage: number;
         }[];
       }[] = [];
+      for (let i = 0; i < this._blocking_strategy.strategy.length; i++) {
+        const { attacker, blockers } = this._blocking_strategy.strategy[i];
+
+        for (let j = 0; j < blockers.length; i++) {
+          const currentBlocker = blockers[j];
+          const indexOfBlocker = attackers_damage_assignment.findIndex(
+            ({ blocker }) => blocker.id === currentBlocker.id
+          );
+          if (indexOfBlocker < 0) {
+            attackers_damage_assignment.push({
+              blocker: currentBlocker,
+              attackers: [
+                {
+                  damage: 0,
+                  unit: attacker,
+                },
+              ],
+            });
+          } else {
+            attackers_damage_assignment[indexOfBlocker] = {
+              ...attackers_damage_assignment[indexOfBlocker],
+              attackers: [
+                ...attackers_damage_assignment[indexOfBlocker].attackers,
+                {
+                  damage: 0,
+                  unit: attacker,
+                },
+              ],
+            };
+          }
+        }
+      }
 
       for (let i = 0; i < attackers_damage_assignment.length; i++) {
         const current_damage_assignment = attackers_damage_assignment[i];
@@ -274,6 +305,8 @@ export class DamageResolutionSubPhase extends SubPhase {
         attackers_damage_assignment[i] =
           await this.chooseBlockerDamageDistribution(current_damage_assignment);
       }
+
+      resolve();
     });
   }
 
