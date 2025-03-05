@@ -9,8 +9,8 @@ export abstract class SubPhase {
     this._on_finish = on_finish;
     this._priority_player = priority_player;
 
-    this.startTurn();
+    this.startSubPhase();
   }
 
-  abstract startTurn(): void;
+  abstract startSubPhase(): void;
 }

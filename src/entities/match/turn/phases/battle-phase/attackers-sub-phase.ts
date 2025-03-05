@@ -19,7 +19,7 @@ export class AttackersSubPhase extends SubPhase {
   @GetMatch()
   get_match: () => Match;
 
-  startTurn() {
+  startSubPhase() {
     const turnPlayer = this.get_match()[this._priority_player];
     const availableAttackers = turnPlayer.board.formation.content.filter(
       (card) =>

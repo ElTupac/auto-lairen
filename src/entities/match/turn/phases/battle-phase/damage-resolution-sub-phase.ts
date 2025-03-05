@@ -310,7 +310,7 @@ export class DamageResolutionSubPhase extends SubPhase {
     });
   }
 
-  async startTurn() {
+  async startSubPhase() {
     await this.startBlockersDamageAssignment();
     await this.startAttackersDamageAssignment();
     new BattleResolve(
