@@ -1,5 +1,5 @@
 import { UUID } from "crypto";
-import { Event } from "../match/match";
+import { Event } from "../commons/event";
 
 type ActionHook = (action: Event) => void;
 
@@ -16,4 +16,5 @@ export type Connection = {
 export type InterfaceType = (...args: Connection[]) => {
   connections: InterfaceSocket[];
   addConnections: (...args: Connection[]) => InterfaceSocket[];
+  startMatch: () => void;
 };
