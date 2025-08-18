@@ -1,9 +1,6 @@
-import { randomUUID } from "crypto";
 import { Connection, InterfaceType } from "./interface/interface-type";
 import { Match } from "./match/match";
 import { Player } from "./player/player";
-import { Event } from "./commons/event";
-import { ReadyEvent } from "./player/events/ready.event";
 
 const _connections: Connection[] = [];
 
@@ -50,24 +47,3 @@ export const main: InterfaceType = (...connections) => {
     },
   };
 };
-
-const log = (source: string) => (event: Event) => {
-  console.log(`${source}: ${JSON.stringify(event)}`);
-};
-
-const playerConnection: Connection[] = [
-  {
-    id: randomUUID(),
-    onAction: log("player-1"),
-  },
-  {
-    id: randomUUID(),
-    onAction: log("player-2"),
-  },
-];
-
-const { connections, startMatch } = main(...playerConnection);
-
-connections.map(({ socket }) => socket(new ReadyEvent()));
-
-startMatch();

@@ -1,0 +1,6 @@
+.player-interface .message-container textarea {
+  display: block;
+  width: 100%;
+  size: auto;
+  resize: none;
+}
