@@ -1,20 +1,20 @@
 import { UUID } from "crypto";
-import { Event } from "../commons/event";
-
-type ActionHook = (action: Event) => void;
+import { Communication } from "../commons/communication";
 
 type InterfaceSocket = {
   id: UUID;
-  socket: ActionHook;
+  type: "spectator" | `player-${number}`;
+  socket: (communication: Communication) => void;
 };
 
 export type Connection = {
   id: UUID;
-  onAction: ActionHook;
+  type: "spectator" | `player-${number}`;
+  onCommunication: (communication: Communication) => void;
 };
 
 export type InterfaceType = (...args: Connection[]) => {
-  connections: InterfaceSocket[];
+  getConnections: () => InterfaceSocket[];
   addConnections: (...args: Connection[]) => InterfaceSocket[];
   startMatch: () => void;
 };

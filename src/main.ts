@@ -1,49 +1,62 @@
+import { Communication } from "./commons/communication";
 import { Connection, InterfaceType } from "./interface/interface-type";
+import { Player } from "./match/entities/player/player";
+import { Spectator } from "./match/entities/spectator/spectator";
 import { Match } from "./match/match";
-import { Player } from "./player/player";
 
 const _connections: Connection[] = [];
 
-export const main: InterfaceType = (...connections) => {
-  const players: Player[] = [];
-
-  for (let i = 0; i < connections.length; i++) {
-    if (!_connections.some(({ id }) => id === connections[i].id)) {
+const _addConnections =
+  (match: Match) =>
+  (...connections: Connection[]) => {
+    for (let i = 0; i < connections.length; i++) {
       const connection = connections[i];
-      _connections.push(connection);
-      players.push(new Player({ connection: connection }));
-    }
-  }
 
-  const match: Match = new Match((event) => {
-    for (let i = 0; i < _connections.length; i++) {
-      _connections[i].onAction(event);
+      if (connection.type === "spectator")
+        match.addSpectator(new Spectator({ connection }));
+      else if (connection.type.includes("player") && !match.match_started) {
+        match.addPlayer(new Player({ connection }));
+      } else {
+        continue;
+      }
+
+      _connections.push(connection);
     }
-  });
-  for (let i = 0; i < players.length; i++) match.addPlayer(players[i]);
+  };
+
+export const main: InterfaceType = (...connections) => {
+  const handleMatchCommunication = (communication: Communication) => {
+    console.log("Communication going out");
+    console.log({ communication });
+  };
+
+  const match = new Match(handleMatchCommunication);
+
+  const addConnections = _addConnections(match);
+  addConnections(...connections);
 
   return {
-    connections: _connections.map(({ id }) => ({
-      id,
-      socket: match.emitEvent,
-    })),
-    addConnections: (...connections) => {
-      for (let i = 0; i < connections.length; i++) {
-        if (!_connections.some(({ id }) => id === connections[i].id)) {
-          const connection = connections[i];
-          _connections.push(connection);
-          players.push(new Player({ connection: connection }));
-        }
-      }
+    addConnections: (...connections: Connection[]) => {
+      addConnections(...connections);
 
-      for (let i = 0; i < players.length; i++) match.addPlayer(players[i]);
-
-      return _connections.map(({ id }) => ({ id, socket: match.emitEvent }));
+      return _connections.map(({ id, type }) => ({
+        id,
+        type,
+        socket: (communication) => {
+          match.receiveCommunication(communication);
+        },
+      }));
     },
     startMatch: () => {
-      if (!!players[0] && !!players[1]) {
-        match.startMatch([players[0].id, players[1].id]);
-      }
+      console.log("want to start match");
     },
+    getConnections: () =>
+      _connections.map(({ id, type }) => ({
+        id,
+        type,
+        socket: (communication) => {
+          match.receiveCommunication(communication);
+        },
+      })),
   };
 };
