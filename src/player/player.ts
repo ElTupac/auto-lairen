@@ -26,7 +26,7 @@ export class Player extends Base {
 
   connectMatch(match: Match) {
     this._match = match;
-    match.emitEvent(new ConnectedEvent(this));
+    this._match.emitEvent(new ConnectedEvent(this));
   }
 
   get ready() {

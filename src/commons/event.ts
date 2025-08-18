@@ -1,6 +1,6 @@
 import { Base } from "./base";
 
-type EventType = "info";
+type EventType = "info" | "setup";
 
 export class Event extends Base {
   private _type: EventType;

@@ -3,6 +3,7 @@ import { Connection, InterfaceType } from "./interface/interface-type";
 import { Match } from "./match/match";
 import { Player } from "./player/player";
 import { Event } from "./commons/event";
+import { ReadyEvent } from "./player/events/ready.event";
 
 const _connections: Connection[] = [];
 
@@ -19,9 +20,6 @@ export const main: InterfaceType = (...connections) => {
 
   const match: Match = new Match((event) => {
     for (let i = 0; i < _connections.length; i++) {
-      console.log("Output event");
-      console.log(event);
-
       _connections[i].onAction(event);
     }
   });
@@ -68,4 +66,8 @@ const playerConnection: Connection[] = [
   },
 ];
 
-main(...playerConnection).startMatch();
+const { connections, startMatch } = main(...playerConnection);
+
+connections.map(({ socket }) => socket(new ReadyEvent()));
+
+startMatch();

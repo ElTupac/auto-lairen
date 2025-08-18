@@ -19,9 +19,7 @@ export class Match extends Base {
   }
 
   emitEvent(event: Event) {
-    console.log("Input event");
-    console.log(event);
-
+    // TODO: logic for event distribution
     this._connection(event);
   }
 
